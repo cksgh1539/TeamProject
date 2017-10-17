@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">한성맛집앱</string>
+    <string name ="restaurantName1">학생식당 </string>
+    <string name ="restaurantAddress1">성북구 </string>
+    <string name ="Phone">02-760-1678 </string>
+    <string name ="starting">11:00~22:00 </string>
+</resources>
