@@ -1,6 +1,5 @@
 package com.example.hp.teamproject;
 
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -21,8 +20,6 @@ import java.util.ArrayList;
 
 public class StudentRestaurant extends AppCompatActivity {
 
-
-
     static final String TAG = "Team";
 
     private ListAdapter createAdapter() {
@@ -41,7 +38,7 @@ public class StudentRestaurant extends AppCompatActivity {
 
         ListAdapter adapt = createAdapter();
 
-        ListView list = (ListView) findViewById(R.id.ListView1);
+        ListView list = (ListView) findViewById(R.id.restaurantMenu);
         list.setAdapter(adapt);
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {

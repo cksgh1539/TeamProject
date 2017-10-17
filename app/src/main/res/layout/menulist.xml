@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/textView2"
@@ -50,7 +49,7 @@
 
                 <TextView
                     android:id="@+id/textItem2"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@android:color/holo_blue_dark"
                     android:padding="4dp"
@@ -79,12 +78,18 @@
         </LinearLayout>
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/restaurantMenu"
+    <TextView
+        android:id="@+id/menubar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FFA3E5E8"
-        android:textSize="40dp"></ListView>
+        android:gravity="center"
+        android:textSize="18dp" />
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ListView4"></ListView>
+
 
 </LinearLayout>
-
