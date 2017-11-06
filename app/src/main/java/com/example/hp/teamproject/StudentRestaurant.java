@@ -1,4 +1,5 @@
 package com.example.hp.teamproject;
+ // 학생식당 메뉴의 큰 범주를 선택할 수 있는 뷰입니다.
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -33,17 +34,17 @@ public class StudentRestaurant extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.restaurant);
+        setContentView(R.layout.restaurant); // restaurant 레이아웃의 틀을 기반으로한다.
         Log.i(TAG, getLocalClassName() + ".onCreate");
 
         ListAdapter adapt = createAdapter();
 
-        ListView list = (ListView) findViewById(R.id.restaurantMenu);
+        ListView list = (ListView) findViewById(R.id.restaurantMenu); //menu의 범주 리스트 ID를 받아옴
         list.setAdapter(adapt);
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View vClicked,
-                                    int position, long id) {
+                                    int position, long id) {   // 각 메뉴 범주 클릭시 뷰 이동
                 if(position == 0){
                     Intent intent = new Intent(getApplicationContext(), SR_noodle.class);
                     intent.putExtra("Menu", "Roll & Noodles");
@@ -62,6 +63,10 @@ public class StudentRestaurant extends AppCompatActivity {
         });
     }
 
+    public void calling(View v) {
+        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:027604499")); //전화 걸기 메소드
+        startActivity(intent);
+    }
     @Override
     protected void onStart() {
         super.onStart();

@@ -10,25 +10,27 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+//MenuItem에서 받은 데이터들을 받아올 어댑터
+
 public class MenuAdapter extends BaseAdapter {
     private ArrayList<MenuItem> nData;
     private Context nContext;
     private int nResource;
 
-    public MenuAdapter(ArrayList<MenuItem> data1, Context context1, int resource1) {
-        nData = data1;
-        nContext = context1;
-        nResource = resource1;
+    public MenuAdapter(ArrayList<MenuItem> data, Context context, int resource) {
+        nData = data;
+        nContext = context;
+        nResource = resource;
     }
 
     @Override
     public int getCount() {
-        return nData.size(); //MyAdapter가 관리하는 항목의 개수
+        return nData.size(); //Adapter가 관리하는 항목의 개수
     }
 
     @Override
     public Object getItem(int j) {
-        return nData.get(j); //MyItem타입의 데이터가 가지고 있는 데이터를 get
+        return nData.get(j); //Item타입의 데이터가 가지고 있는 데이터를 get
     }
 
     @Override

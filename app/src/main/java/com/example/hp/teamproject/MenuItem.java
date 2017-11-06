@@ -1,5 +1,7 @@
 package com.example.hp.teamproject;
 
+//메뉴의 이미지,이름,가격을 받는 어댑터 클래스
+
 public class MenuItem {
     private int Food;
     private String Name;

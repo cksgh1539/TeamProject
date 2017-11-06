@@ -1,6 +1,6 @@
 package com.example.hp.teamproject;
 
-
+//SR_Noodle 클래스와 동일합니다.
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -33,13 +33,17 @@ public class SR_rice extends AppCompatActivity {
         menu.setText(Menu);
 
         ArrayList<MenuItem> data1 = new ArrayList<>();
-        data1.add(new MenuItem(R.drawable.m1,"냉모밀","4000원"));
-        data1.add(new MenuItem(R.drawable.m2,"물냉면","4000원"));
-        data1.add(new MenuItem(R.drawable.m3,"김밥","2000원"));
+        data1.add(new MenuItem(R.drawable.m4,"비빔밥","4000원"));
+        data1.add(new MenuItem(R.drawable.m5,"제육덮밥","4500원"));
+
+        ArrayList<FoodItem> data2 = new ArrayList<>();
+        data2.add(new FoodItem(R.drawable.m4,"비빔밥","4000원","평점: ★★"));
+        data2.add(new FoodItem(R.drawable.m5,"제육덮밥","4500원","평점: ★★"));
 
 
 
         final MenuAdapter adapter1 = new MenuAdapter(data1,this,R.layout.menu);
+        final FoodAdapter adapter2 = new FoodAdapter(data2,this,R.layout.menu);
 
 
         ListView listView1 = (ListView)findViewById(R.id.ListView4);
@@ -62,6 +66,15 @@ public class SR_rice extends AppCompatActivity {
 
                 Intent intent = new Intent(getApplicationContext(), FoodDetail.class);
 
+                int Image = ((FoodItem)adapter2.getItem(position)).getFood();
+                String name = ((FoodItem)adapter2.getItem(position)).getName();
+                String price = ((FoodItem)adapter2.getItem(position)).getPrice();
+                String score = ((FoodItem)adapter2.getItem(position)).getScore();
+
+                intent.putExtra("Image", Image);
+                intent.putExtra("Name", name);
+                intent.putExtra("Price", price);
+                intent.putExtra("Score", score);
 
 
                 startActivity(intent);
@@ -97,6 +110,10 @@ public class SR_rice extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         Log.i(TAG, getLocalClassName() + ".onDestroy");
+    }
+    public void calling(View v) {
+        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:027604499"));
+        startActivity(intent);
     }
 
 

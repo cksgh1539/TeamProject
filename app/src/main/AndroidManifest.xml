@@ -9,13 +9,33 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity android:name=".StudentRestaurant">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-    </application>
 
+        <activity android:name=".SR_noodle"
+            android:parentActivityName=".StudentRestaurant">
+        </activity>
+
+        <activity android:name=".SR_rice"
+            android:parentActivityName=".StudentRestaurant">
+        </activity>
+
+        <activity android:name=".SR_fry"
+            android:parentActivityName=".StudentRestaurant">
+        </activity>
+
+        <activity android:name=".FoodDetail"
+            android:parentActivityName=".StudentRestaurant">
+        </activity>
+
+        <uses-permission android:name="android.permission.CALL_PHONE"/>
+
+
+    </application>
 </manifest>
