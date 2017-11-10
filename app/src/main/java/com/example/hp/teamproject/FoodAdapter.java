@@ -31,15 +31,14 @@ public class FoodAdapter extends BaseAdapter{
             view = inflater.inflate(fResource, viewGroup,false);
         }
 
-        ImageView Image = view.findViewById(R.id.imageView);
-        TextView name = view.findViewById(R.id.Name);
-        TextView price = view.findViewById(R.id.Price);
-        TextView score = view.findViewById(R.id.Score);
+        ImageView Image = view.findViewById(R.id.iconItem);
+        TextView name = view.findViewById(R.id.textItem4);
+        TextView price = view.findViewById(R.id.textItem5);
 
         Image.setImageResource(fData.get(j).getFood());
         name.setText(fData.get(j).getName());
         price.setText(fData.get(j).getPrice());
-        score.setText(fData.get(j).getScore());
+
 
         return view;
     }

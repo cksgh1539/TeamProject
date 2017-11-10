@@ -24,7 +24,7 @@ public class SR_noodle extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menulist); // 음식들 리스트 레이아웃을 기반으로함
 
@@ -33,23 +33,16 @@ public class SR_noodle extends AppCompatActivity {
         TextView menu = (TextView)findViewById(R.id.menubar); // 소제목 레이아웃 ID
         menu.setText(Menu);
 
-        ArrayList<MenuItem> data1 = new ArrayList<>();       // 이미지,이름,가격들의 데이터들
-        data1.add(new MenuItem(R.drawable.m1,"냉모밀","4000원"));
-        data1.add(new MenuItem(R.drawable.m2,"물냉면","4000원"));
-        data1.add(new MenuItem(R.drawable.m3,"김밥","2000원"));
 
-        ArrayList<FoodItem> data2 = new ArrayList<>(); // 평점이 추가된 데이터들
+        ArrayList<FoodItem> data2 = new ArrayList<>(); // 이미지,이름,가격,평점점 추가된 데이터들
         data2.add(new FoodItem(R.drawable.m1,"냉모밀","4000원","평점: ★★"));
         data2.add(new FoodItem(R.drawable.m2,"물냉면","4000원","평점: ★★"));
         data2.add(new FoodItem(R.drawable.m3,"김밥","2000원","평점: ★★"));
 
-
-
-        final MenuAdapter adapter1 = new MenuAdapter(data1,this,R.layout.menu); // menu의 이미지와 이름,내용을 나타내는 레이아웃을 받아옴,평점을 제외한 데이터
-        final FoodAdapter adapter2 = new FoodAdapter(data2,this,R.layout.menu); // FoodDetail로 넘어갈 데이터들을 넣어줍니다.
+        final FoodAdapter adapter = new FoodAdapter(data2,this,R.layout.menu); // 메뉴의 이미지와 이름, 평점을 어댑터에 넣어줌
 
         ListView listView1 = (ListView)findViewById(R.id.ListView4); // menulist.xml에 있는 listView ID입니다.
-        listView1.setAdapter(adapter1);
+        listView1.setAdapter(adapter);
         listView1.setDividerHeight(5);
 
         ActionBar actionBar = getSupportActionBar();
@@ -68,10 +61,10 @@ public class SR_noodle extends AppCompatActivity {
 
                 Intent intent = new Intent(getApplicationContext(), FoodDetail.class);
 
-                int Image = ((FoodItem)adapter2.getItem(position)).getFood();     //평점까지 받은 데이터들을 받아서 넘겨줍니다.
-                String name = ((FoodItem)adapter2.getItem(position)).getName();
-                String price = ((FoodItem)adapter2.getItem(position)).getPrice();
-                String score = ((FoodItem)adapter2.getItem(position)).getScore();
+                int Image = ((FoodItem)adapter.getItem(position)).getFood();     // 받은 데이터들을 받아서 넘겨줍니다.
+                String name = ((FoodItem)adapter.getItem(position)).getName();
+                String price = ((FoodItem)adapter.getItem(position)).getPrice();
+                String score = ((FoodItem)adapter.getItem(position)).getScore();
 
                 intent.putExtra("Image", Image);
                 intent.putExtra("Name", name);
