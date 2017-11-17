@@ -4,4 +4,9 @@
     <string name ="restaurantAddress1">성북구 </string>
     <string name ="Phone">02-760-1678 </string>
     <string name ="starting">11:00~22:00 </string>
+    <string name="number">번호</string>
+    <string name="name">이름</string>
+    <string name="address">주소</string>
+    <string name="todo">TODO</string>
+    <string name="resistRS">맛집 등록</string>
 </resources>

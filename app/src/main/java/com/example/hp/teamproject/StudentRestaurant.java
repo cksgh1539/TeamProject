@@ -1,3 +1,4 @@
+/*
 package com.example.hp.teamproject;
  // 학생식당 메뉴의 큰 범주를 선택할 수 있는 뷰입니다.
 
@@ -99,3 +100,4 @@ public class StudentRestaurant extends AppCompatActivity {
 
 }
 
+*/

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.hp.teamproject">
-
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".StudentRestaurant">
+        <activity android:name=".ResistRS">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -19,22 +19,22 @@
         </activity>
 
         <activity android:name=".SR_noodle"
-            android:parentActivityName=".StudentRestaurant">
+            android:parentActivityName=".ResistRS">
         </activity>
 
         <activity android:name=".SR_rice"
-            android:parentActivityName=".StudentRestaurant">
+            android:parentActivityName=".ResistRS">
         </activity>
 
         <activity android:name=".SR_fry"
-            android:parentActivityName=".StudentRestaurant">
+            android:parentActivityName=".ResistRS">
         </activity>
 
         <activity android:name=".FoodDetail"
-            android:parentActivityName=".StudentRestaurant">
+            android:parentActivityName=".ResistRS">
         </activity>
 
-        <uses-permission android:name="android.permission.CALL_PHONE"/>
+
 
 
     </application>
