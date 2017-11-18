@@ -35,10 +35,4 @@ public class RSdbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getReadableDatabase();
         return db.query(RSdb.Restaurant.TABLE_NAME,null,null,null,null,null,null);
     }
-
-    public Cursor getAllUsersBySQL() {
-        String sql = "Select * FROM " + RSdb.Restaurant.TABLE_NAME;
-        return getReadableDatabase().rawQuery(sql,null);
-
-    }
 }

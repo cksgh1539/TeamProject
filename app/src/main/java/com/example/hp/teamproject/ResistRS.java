@@ -27,10 +27,12 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
 import java.io.File;
+import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class ResistRS extends AppCompatActivity{
+    Uri imageUri;
     EditText RSname;
     EditText RSnum;
     EditText RSadrress;
@@ -61,7 +63,7 @@ public class ResistRS extends AppCompatActivity{
         ResistRS.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 insertRecord();
-                viewAllToListView();
+                //viewAllToListView();
             }
         });
     }
@@ -84,7 +86,7 @@ public class ResistRS extends AppCompatActivity{
 
             if (mPhotoFile != null) {
             //2. 생성된 파일 객체에 대한 Uri 객체를 얻기
-                Uri imageUri = FileProvider.getUriForFile(this,
+                imageUri = FileProvider.getUriForFile(this,
                         "com.example.hp.teamproject", mPhotoFile);
 
             //3. Uri 객체를 Extras를 통해 카메라 앱으로 전달
@@ -100,7 +102,7 @@ public class ResistRS extends AppCompatActivity{
         ImageView imageView = (ImageView) findViewById(R.id.RS_Image);
 
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Uri imageUri = FileProvider.getUriForFile(this,
+            imageUri = FileProvider.getUriForFile(this,
                     "com.example.hp.teamproject", mPhotoFile);
 
             if (mPhotoFileName != null) {
@@ -134,13 +136,13 @@ public class ResistRS extends AppCompatActivity{
                 (RSname.getText().toString(), RSnum.getText().toString(), RSadrress.getText().toString());
         if(nOfRows > 0) {
             Toast.makeText(this, "맛집 등록중...", Toast.LENGTH_SHORT).show();
-            //Intent RestaurantDetail = new Intent(getApplicationContext(), FoodDetail.class);
-            //startActivity(RestaurantDetail);
+            Intent RestaurantDetail = new Intent(getApplicationContext(), RestaurantDetail.class);
+            startActivity(RestaurantDetail);
         }
         else Toast.makeText(this,"[Error] Try again",Toast.LENGTH_SHORT).show();
     }
 
-    private void viewAllToListView() {  //일단 버튼 밑 listview에 불러오기(원래 RestaurantDetail로 넘겨야함)
+   /* private void viewAllToListView() {  //일단 버튼 밑 listview에 불러오기(원래 RestaurantDetail로 넘겨야함)
         Log.i(TAG, getLocalClassName() + " = load");
         Cursor cursor = mDbHelper.getAllUsersByMethod();
 
@@ -164,7 +166,7 @@ public class ResistRS extends AppCompatActivity{
             }
         });
         lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-    }
+    }*/
 
     //permission확인 메소드-------------------------------------------------------------------------
     final int  REQUEST_EXTERNAL_STORAGE_FOR_MULTIMEDIA=1;

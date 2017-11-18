@@ -22,19 +22,11 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".SR_noodle"
-            android:parentActivityName=".ResistRS">
-        </activity>
-
-        <activity android:name=".SR_rice"
-            android:parentActivityName=".ResistRS">
-        </activity>
-
-        <activity android:name=".SR_fry"
-            android:parentActivityName=".ResistRS">
-        </activity>
-
         <activity android:name=".FoodDetail"
+            android:parentActivityName=".ResistRS">
+        </activity>
+
+        <activity android:name=".RestaurantDetail"
             android:parentActivityName=".ResistRS">
         </activity>
 
