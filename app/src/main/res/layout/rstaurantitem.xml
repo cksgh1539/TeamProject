@@ -1,17 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-    ***************************************나중에 삭제*******************************
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|center_horizontal"
-        android:text="@string/restaurantName1"
-        android:textSize="40dp" />
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -34,7 +24,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textItem1"
+                android:id="@+id/name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/holo_blue_dark"
@@ -48,8 +38,8 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/textItem2"
-                    android:layout_width="match_parent"
+                    android:id="@+id/number"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@android:color/holo_blue_dark"
                     android:padding="4dp"
@@ -66,7 +56,7 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/textItem3"
+                android:id="@+id/adrress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/holo_blue_dark"
@@ -74,14 +64,6 @@
                 android:textColor="@android:color/background_light"
                 android:textSize="20dp" />
         </LinearLayout>
-   </LinearLayout>
+    </LinearLayout>
 
-    <ListView
-        android:id="@+id/restaurantMenu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#FFA3E5E8"
-        android:textSize="40dp"></ListView>
-
-</LinearLayout>
-
+</android.support.constraint.ConstraintLayout>

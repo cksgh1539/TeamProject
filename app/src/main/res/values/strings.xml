@@ -9,4 +9,8 @@
     <string name="address">주소</string>
     <string name="todo">TODO</string>
     <string name="resistRS">맛집 등록</string>
+    <string name="menuname">메뉴이름</string>
+    <string name="price">가격</string>
+    <string name="detail">설명</string>
+    <string name="resistMENU">메뉴등록</string>
 </resources>

@@ -1,3 +1,4 @@
+package com.example.hp.teamproject;/*
 package com.example.hp.teamproject;
 
 //메뉴 세분화 리스트들이 나오는 뷰입니다.
@@ -41,7 +42,7 @@ public class SR_noodle extends AppCompatActivity {
 
         final FoodAdapter adapter = new FoodAdapter(data2,this,R.layout.menu); // 메뉴의 이미지와 이름, 평점을 어댑터에 넣어줌
 
-        ListView listView1 = (ListView)findViewById(R.id.ListView4); // menulist.xml에 있는 listView ID입니다.
+        ListView listView1 = (ListView)findViewById(R.id.listview); // menulist.xml에 있는 listView ID입니다.
         listView1.setAdapter(adapter);
         listView1.setDividerHeight(5);
 
@@ -114,3 +115,4 @@ public class SR_noodle extends AppCompatActivity {
 
 }
 
+*/

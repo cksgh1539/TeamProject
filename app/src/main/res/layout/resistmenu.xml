@@ -5,43 +5,35 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="140dp"
-        android:src = "@drawable/ic_action_camera"
-        android:layout_weight="1"
-        android:id="@+id/RS_Image"
-        android:contentDescription="@string/todo" />
-
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="3"
         android:orientation="vertical">
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/name"/>
+
+        <ImageView
+            android:id="@+id/RS_Image"
+            android:layout_width="300dp"
+            android:layout_height="240dp"
+            android:layout_gravity="center"
+            android:layout_margin="15dp"
+            android:contentDescription="@string/todo"
+            android:src="@drawable/icon_camera" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/number"/>
-
+            android:hint="@string/menuname" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/address"/>
+            android:hint="@string/price" />
 
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/detail" />
     </LinearLayout>
-
-</LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -50,7 +42,7 @@
             android:id="@+id/Resist_RS"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text = "@string/resistRS"/>
+            android:text = "@string/resistMENU"/>
     </LinearLayout>
 
 </LinearLayout>

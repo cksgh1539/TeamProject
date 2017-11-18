@@ -1,3 +1,4 @@
+package com.example.hp.teamproject;/*
 package com.example.hp.teamproject;
 
 //SR_noodle 클래스와 동일합니다.
@@ -41,7 +42,7 @@ public class SR_fry extends AppCompatActivity {
         final FoodAdapter adapter = new FoodAdapter(data2,this,R.layout.menu);
 
 
-        ListView listView1 = (ListView)findViewById(R.id.ListView4);
+        ListView listView1 = (ListView)findViewById(R.id.listview);
         listView1.setAdapter(adapter);
         listView1.setDividerHeight(5);
 
@@ -114,3 +115,4 @@ public class SR_fry extends AppCompatActivity {
 
 }
 
+*/
