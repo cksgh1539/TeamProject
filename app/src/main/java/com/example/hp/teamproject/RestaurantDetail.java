@@ -4,11 +4,12 @@ package com.example.hp.teamproject;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Adapter;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
-
-/**
- * Created by hp on 2017-11-17.
- */
 
 public class RestaurantDetail extends AppCompatActivity {
     TextView NAME;
@@ -27,11 +28,10 @@ public class RestaurantDetail extends AppCompatActivity {
         ADRRESS = (TextView)findViewById(R.id.adrress);
 
         mDbHelper = new RSdbHelper(this);
-
-        viewAllToTextView();
+        viewAllToListView();
     }
 
-    private void viewAllToTextView() {
+    /*private void viewAllToTextView() {
         TextView result = (TextView)findViewById(R.id.result);
 
         Cursor cursor = mDbHelper.getAllUsersBySQL();
@@ -43,16 +43,16 @@ public class RestaurantDetail extends AppCompatActivity {
             buffer.append(cursor.getString(3)+"\n");
         }
         result.setText(buffer);
-    }
+    }*/
 
-    /*private void viewAllToListView() {
+    private void viewAllToListView() {
         Cursor cursor = mDbHelper.getAllUsersByMethod();
 
-        SimpleCursorAdapter adapter
-                = new SimpleCursorAdapter(getApplicationContext(),R.layout.rstaurantitem, cursor,
-                new String[]{RSdbContract.Restaurant.KEY_name,
-                             RSdbContract.Restaurant.KEY_num,
-                             RSdbContract.Restaurant.KEY_adrress},
+        SimpleCursorAdapter adapter = new SimpleCursorAdapter(getApplicationContext(),
+                R.layout.rstaurantitem, cursor,
+                new String[]{RSdb.Restaurant.KEY_name,
+                             RSdb.Restaurant.KEY_num,
+                             RSdb.Restaurant.KEY_adrress},
                 new int[]{R.id.name, R.id.number, R.id.adrress}, 0);
 
         ListView lv = (ListView)findViewById(R.id.listview);
@@ -67,7 +67,7 @@ public class RestaurantDetail extends AppCompatActivity {
             }
         });
         lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-    }*/
+    }
 
 }
 

@@ -4,20 +4,26 @@ package com.example.hp.teamproject;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.SyncStateContract;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
 import java.io.File;
@@ -25,9 +31,15 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class ResistRS extends AppCompatActivity{
+    EditText RSname;
+    EditText RSnum;
+    EditText RSadrress;
     String mPhotoFileName = null;
     File mPhotoFile = null;
+
     private RSdbHelper mDbHelper;
+
+    String TAG = "CY";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +47,6 @@ public class ResistRS extends AppCompatActivity{
         setContentView(R.layout.resistrs);
 
         checkDangerousPermissions();//permission획득 체크
-
         mDbHelper = new RSdbHelper(this);
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
@@ -50,8 +61,7 @@ public class ResistRS extends AppCompatActivity{
         ResistRS.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 insertRecord();
-                Intent RestaurantDetail = new Intent(getApplicationContext(),RestaurantDetail.class);
-                startActivity(RestaurantDetail);
+                viewAllToListView();
             }
         });
     }
@@ -80,7 +90,7 @@ public class ResistRS extends AppCompatActivity{
             //3. Uri 객체를 Extras를 통해 카메라 앱으로 전달
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-                Log.i("AA", getLocalClassName() + " = camera");
+                Log.i(TAG, getLocalClassName() + " = camera");
             } else
                 Toast.makeText(getApplicationContext(), "file null", Toast.LENGTH_SHORT).show();
         }
@@ -97,15 +107,13 @@ public class ResistRS extends AppCompatActivity{
                 try {
                     File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
                     mPhotoFile = new File(path, mPhotoFileName);
-                    Log.i("AA", getLocalClassName() + " = save");
+                    Log.i(TAG, getLocalClassName() + " = save");
                     imageView.setImageURI(imageUri); //imageView에 찍은 사진 표시
-                    Toast.makeText(getApplicationContext(), "Picture Saved in sdcard",
-                            Toast.LENGTH_SHORT).show();
                 }catch (Exception e) {
                     e.printStackTrace();
                 }
             } else
-                Toast.makeText(getApplicationContext(), "mPhotoFile is null",
+                Toast.makeText(getApplicationContext(), "PhotoFile is null",
                         Toast.LENGTH_SHORT).show();
         }
     }
@@ -118,19 +126,47 @@ public class ResistRS extends AppCompatActivity{
 
     // 맛집 정보 db에 등록하기----------------------------------------------------------------------
     private void insertRecord() {
-        EditText RSname = (EditText)findViewById(R.id.RSname); //맛집 이름 입력
-        EditText RSnum = (EditText)findViewById(R.id.RSnum); //맛집 번호 입력
-        EditText RSadrress = (EditText)findViewById(R.id.RSadrress); // 맛집 주소 입력
+        RSname = (EditText)findViewById(R.id.RSname); //맛집 이름 입력
+        RSnum = (EditText)findViewById(R.id.RSnum); //맛집 번호 입력
+        RSadrress = (EditText)findViewById(R.id.RSadrress); // 맛집 주소 입력
 
         long nOfRows = mDbHelper.insertUserByMethod
                 (RSname.getText().toString(), RSnum.getText().toString(), RSadrress.getText().toString());
-        if(nOfRows > 0)
-            Toast.makeText(this, nOfRows+"맛집 등록중...",Toast.LENGTH_SHORT).show();
-        else Toast.makeText(this, nOfRows+"[Error]오류 발생! 다시 시도 바람",Toast.LENGTH_SHORT).show();
+        if(nOfRows > 0) {
+            Toast.makeText(this, "맛집 등록중...", Toast.LENGTH_SHORT).show();
+            //Intent RestaurantDetail = new Intent(getApplicationContext(), FoodDetail.class);
+            //startActivity(RestaurantDetail);
+        }
+        else Toast.makeText(this,"[Error] Try again",Toast.LENGTH_SHORT).show();
     }
 
+    private void viewAllToListView() {  //일단 버튼 밑 listview에 불러오기(원래 RestaurantDetail로 넘겨야함)
+        Log.i(TAG, getLocalClassName() + " = load");
+        Cursor cursor = mDbHelper.getAllUsersByMethod();
 
-    //permission확인------------------------------------------------------------------
+        SimpleCursorAdapter adapter = new SimpleCursorAdapter(getApplicationContext(),
+                R.layout.rstaurantitem, cursor, new String[]{
+                RSdb.Restaurant.KEY_name,
+                RSdb.Restaurant.KEY_num,
+                RSdb.Restaurant.KEY_adrress},
+                new int[]{R.id.name, R.id.number, R.id.adrress}, 0);
+
+        ListView lv = (ListView)findViewById(R.id.listview);
+        lv.setAdapter(adapter);
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Adapter adapter = adapterView.getAdapter();
+                RSname.setText(((Cursor)adapter.getItem(i)).getString(1));
+                RSnum.setText(((Cursor)adapter.getItem(i)).getString(2));
+                RSadrress.setText(((Cursor)adapter.getItem(i)).getString(3));
+            }
+        });
+        lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+    }
+
+    //permission확인 메소드-------------------------------------------------------------------------
     final int  REQUEST_EXTERNAL_STORAGE_FOR_MULTIMEDIA=1;
     private void checkDangerousPermissions() {
         String[] permissions = new String[]{

@@ -6,45 +6,39 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-/**
- * Created by Kangeunjin on 2017-11-18.
- */
-
 public class RSdbHelper extends SQLiteOpenHelper {
 
     public RSdbHelper(Context context) {
-        super(context, RSdbContract.DB_NAME, null, RSdbContract.DATABASE_VERSION);
+        super(context, RSdb.DB_NAME, null, RSdb.DATABASE_VERSION);
     }
 
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(RSdbContract.Restaurant.CREATE_TABLE);
+        db.execSQL(RSdb.Restaurant.CREATE_TABLE);
     }
 
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
-        db.execSQL(RSdbContract.Restaurant.DELETE_TABLE);
+        db.execSQL(RSdb.Restaurant.DELETE_TABLE);
         onCreate(db);
     }
 
     public long insertUserByMethod(String name, String num, String adrress) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(RSdbContract.Restaurant.KEY_name, name);
-        values.put(RSdbContract.Restaurant.KEY_num, num);
-        values.put(RSdbContract.Restaurant.KEY_adrress, adrress);
+        values.put(RSdb.Restaurant.KEY_name, name);
+        values.put(RSdb.Restaurant.KEY_num, num);
+        values.put(RSdb.Restaurant.KEY_adrress, adrress);
 
-        return db.insert(RSdbContract.Restaurant.TABLE_NAME, null, values);
+        return db.insert(RSdb.Restaurant.TABLE_NAME, null, values);
     }
 
     public Cursor getAllUsersByMethod() {
         SQLiteDatabase db = getReadableDatabase();
-        return db.query(RSdbContract.Restaurant.TABLE_NAME,null,null,null,null,null,null);
+        return db.query(RSdb.Restaurant.TABLE_NAME,null,null,null,null,null,null);
     }
 
     public Cursor getAllUsersBySQL() {
-        String sql = "Select * FROM " + RSdbContract.Restaurant.TABLE_NAME;
+        String sql = "Select * FROM " + RSdb.Restaurant.TABLE_NAME;
         return getReadableDatabase().rawQuery(sql,null);
 
     }
-
-
 }
