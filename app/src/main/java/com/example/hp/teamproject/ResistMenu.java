@@ -24,13 +24,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class ResistMenu extends AppCompatActivity {
-    Uri imageUri;
+    Uri MENUUri;
     EditText MENUname;
     EditText MENUprice;
-    EditText MENUcoment;
+    EditText MENUcomment;
     String mPhotoFileName = null;
     File mPhotoFile = null;
-    private RSdbHelper mDbHelper;
+    private MENUdbHelper mDbHelper;
 
     String TAG = "food";
 
@@ -40,8 +40,7 @@ public class ResistMenu extends AppCompatActivity {
         setContentView(R.layout.resistmenu);
 
         checkDangerousPermissions();//permission획득 체크
-        mDbHelper = new RSdbHelper(this);
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        mDbHelper = new MENUdbHelper(this);
 
         ImageView RSimage = (ImageView)findViewById(R.id.MENU_Image);
         RSimage.setOnClickListener(new View.OnClickListener() {
@@ -77,11 +76,11 @@ public class ResistMenu extends AppCompatActivity {
 
             if (mPhotoFile != null) {
                 //2. 생성된 파일 객체에 대한 Uri 객체를 얻기
-                imageUri = FileProvider.getUriForFile(this,
+                MENUUri = FileProvider.getUriForFile(this,
                         "com.example.hp.teamproject", mPhotoFile);
 
                 //3. Uri 객체를 Extras를 통해 카메라 앱으로 전달
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, MENUUri);
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
                 Log.i(TAG, getLocalClassName() + " :camera");
             } else
@@ -90,10 +89,10 @@ public class ResistMenu extends AppCompatActivity {
     }
 
     protected void onActivityResult(int requestCode, int resultCode,Intent data) {
-        ImageView imageView = (ImageView) findViewById(R.id.RS_Image);
+        ImageView imageView = (ImageView) findViewById(R.id.MENU_Image);
 
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            imageUri = FileProvider.getUriForFile(this,
+            MENUUri = FileProvider.getUriForFile(this,
                     "com.example.hp.teamproject", mPhotoFile);
 
             if (mPhotoFileName != null) {
@@ -104,7 +103,7 @@ public class ResistMenu extends AppCompatActivity {
                     //Bitmap bitmap = ((BitmapDrawable)mPhotoFile).getBitmap();
                     //http://citynetc.tistory.com/150 bitmap으로 db에 이미지 저장
                     Log.i(TAG, getLocalClassName() + " :savePicture");
-                    imageView.setImageURI(imageUri); //imageView에 찍은 사진 표시
+                    imageView.setImageURI(MENUUri); //imageView에 찍은 사진 표시
                 }catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -124,18 +123,17 @@ public class ResistMenu extends AppCompatActivity {
     private void insertRecord() {
         MENUname = (EditText)findViewById(R.id.MENUname); //맛집 이름 입력
         MENUprice = (EditText)findViewById(R.id.MENUprice); //맛집 번호 입력
-        MENUcoment = (EditText)findViewById(R.id.MENUcoment); // 맛집 주소 입력
+        MENUcomment = (EditText)findViewById(R.id.MENUcomment); // 맛집 주소 입력
 
         long nOfRows = mDbHelper.insertMENUByMethod
-                ( imageUri.toString(), MENUname.getText().toString(),
-                        MENUprice.getText().toString(), MENUcoment.getText().toString());
-        Log.i(TAG, getLocalClassName() + " :insert" + nOfRows);
+                (MENUname.getText().toString(),MENUprice.getText().toString(), MENUcomment.getText().toString());
+        Log.i(TAG, getLocalClassName() + " :insert" +MENUname.getText().toString()+ MENUprice.getText().toString()+MENUcomment.getText().toString());
 
         if(nOfRows > 0) {
             Toast.makeText(this, "메뉴 등록중...", Toast.LENGTH_SHORT).show();
 
             Intent RestaurantDetail = new Intent(getApplicationContext(), RestaurantDetail.class);
-            RestaurantDetail.setData(imageUri); //Intent로 찍은 사진의 uri값을 넘겨줌
+            RestaurantDetail.setData(MENUUri); //Intent로 찍은 사진의 uri값을 넘겨줌
 
             startActivity(RestaurantDetail);
         }else Toast.makeText(this,"[Error] Try again",Toast.LENGTH_SHORT).show();

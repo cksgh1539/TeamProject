@@ -34,7 +34,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class ResistRS extends AppCompatActivity{
-    Uri imageUri;
+    Uri RSUri;
     EditText RSname;
     EditText RSnum;
     EditText RSadrress;
@@ -52,7 +52,6 @@ public class ResistRS extends AppCompatActivity{
 
         checkDangerousPermissions();//permission획득 체크
         mDbHelper = new RSdbHelper(this);
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
         ImageView RSimage = (ImageView)findViewById(R.id.RS_Image);
         RSimage.setOnClickListener(new View.OnClickListener() {
@@ -87,11 +86,11 @@ public class ResistRS extends AppCompatActivity{
 
             if (mPhotoFile != null) {
             //2. 생성된 파일 객체에 대한 Uri 객체를 얻기
-                imageUri = FileProvider.getUriForFile(this,
+                RSUri = FileProvider.getUriForFile(this,
                         "com.example.hp.teamproject", mPhotoFile);
 
             //3. Uri 객체를 Extras를 통해 카메라 앱으로 전달
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, RSUri);
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
                 Log.i(TAG, getLocalClassName() + " :camera");
             } else
@@ -103,7 +102,7 @@ public class ResistRS extends AppCompatActivity{
         ImageView imageView = (ImageView) findViewById(R.id.RS_Image);
 
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            imageUri = FileProvider.getUriForFile(this,
+            RSUri = FileProvider.getUriForFile(this,
                     "com.example.hp.teamproject", mPhotoFile);
 
             if (mPhotoFileName != null) {
@@ -114,7 +113,7 @@ public class ResistRS extends AppCompatActivity{
                     //Bitmap bitmap = ((BitmapDrawable)mPhotoFile).getBitmap();
                     //http://citynetc.tistory.com/150 bitmap으로 db에 이미지 저장
                     Log.i(TAG, getLocalClassName() + " :savePicture");
-                    imageView.setImageURI(imageUri); //imageView에 찍은 사진 표시
+                    imageView.setImageURI(RSUri); //imageView에 찍은 사진 표시
                 }catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -138,15 +137,14 @@ public class ResistRS extends AppCompatActivity{
         RSadrress = (EditText)findViewById(R.id.RSadrress); // 맛집 주소 입력
 
         long nOfRows = mDbHelper.insertRSByMethod
-                ( RSname.getText().toString(),
-                        RSnum.getText().toString(), RSadrress.getText().toString());
+                ( RSname.getText().toString(),RSnum.getText().toString(), RSadrress.getText().toString());
         Log.i(TAG, getLocalClassName() + " :insert" + nOfRows);
 
         if(nOfRows > 0) {
             Toast.makeText(this, "맛집 등록중...", Toast.LENGTH_SHORT).show();
 
             Intent RestaurantDetail = new Intent(getApplicationContext(), RestaurantDetail.class);
-            RestaurantDetail.setData(imageUri); //Intent로 찍은 사진의 uri값을 넘겨줌
+            RestaurantDetail.setData(RSUri); //Intent로 찍은 사진의 uri값을 넘겨줌
 
             startActivity(RestaurantDetail);
         }else Toast.makeText(this,"[Error] Try again",Toast.LENGTH_SHORT).show();

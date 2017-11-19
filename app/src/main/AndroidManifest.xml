@@ -22,8 +22,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".FoodDetail"
-            android:parentActivityName=".ResistRS">
+        <activity android:name=".ResistMenu"
+            android:parentActivityName=".RestaurantDetail">
         </activity>
 
         <activity android:name=".RestaurantDetail"

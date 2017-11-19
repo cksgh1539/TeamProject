@@ -31,9 +31,9 @@ public class FoodAdapter extends BaseAdapter{
             view = inflater.inflate(fResource, viewGroup,false);
         }
 
-        ImageView Image = view.findViewById(R.id.iconItem);
-        TextView name = view.findViewById(R.id.textItem4);
-        TextView price = view.findViewById(R.id.textItem5);
+        ImageView Image = view.findViewById(R.id.MenuImage);
+        TextView name = view.findViewById(R.id.MenuName);
+        TextView price = view.findViewById(R.id.MenuPrice);
 
         Image.setImageResource(fData.get(j).getFood());
         name.setText(fData.get(j).getName());

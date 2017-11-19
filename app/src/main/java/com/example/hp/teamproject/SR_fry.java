@@ -1,3 +1,4 @@
+/*
 package com.example.hp.teamproject;
 
 //SR_noodle 클래스와 동일합니다.
@@ -116,3 +117,4 @@ public class SR_fry extends AppCompatActivity {
 
 
 
+*/

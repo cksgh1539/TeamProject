@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import org.w3c.dom.Text;
 
@@ -18,10 +19,12 @@ public class RSdbHelper extends SQLiteOpenHelper {
 
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(RSdb.Restaurant.CREATE_TABLE);
+        //db.execSQL(RSdb.Menu.CREATE_TABLE);
     }
 
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
         db.execSQL(RSdb.Restaurant.DELETE_TABLE);
+        //db.execSQL(RSdb.Menu.DELETE_TABLE);
         onCreate(db);
     }
 
@@ -41,20 +44,18 @@ public class RSdbHelper extends SQLiteOpenHelper {
         return db.query(RSdb.Restaurant.TABLE_NAME,null,null,null,null,null,null);
     }
 
-    //메뉴 정보 db에 저장---------------------------------------------------------------------------
-    public long insertMENUByMethod(String uri, String menu, String price, String coment) {
+    /*//메뉴 정보 db에 저장---------------------------------------------------------------------------
+    public long insertMENUByMethod(String menu, String price, String comment) {
         SQLiteDatabase db = getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(RSdb.Menues.KEY_uri,uri);
-        values.put(RSdb.Menues.KEY_menu, menu);
-        values.put(RSdb.Menues.KEY_price, price);
-        values.put(RSdb.Menues.KEY_coment, coment);
-
-        return db.insert(RSdb.Menues.TABLE_NAME, null, values);
+        ContentValues values2 = new ContentValues();
+        values2.put(RSdb.Menu.KEY_menu, menu);
+        values2.put(RSdb.Menu.KEY_price, price);
+        values2.put(RSdb.Menu.KEY_comment, comment);
+        return db.insert(RSdb.Menu.TABLE_NAME, null, values2);
     }
 
     public Cursor getMENUByMethod() {
         SQLiteDatabase db = getReadableDatabase();
-        return db.query(RSdb.Menues.TABLE_NAME,null,null,null,null,null,null);
-    }
+        return db.query(RSdb.Menu.TABLE_NAME,null,null,null,null,null,null);
+    }*/
 }

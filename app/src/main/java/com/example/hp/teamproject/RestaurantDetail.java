@@ -4,6 +4,7 @@ package com.example.hp.teamproject;
 import android.accessibilityservice.GestureDescription;
 import android.content.Intent;
 import android.database.Cursor;
+import android.media.browse.MediaBrowser;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -22,14 +23,15 @@ import android.widget.TextView;
 import java.net.URI;
 
 public class RestaurantDetail extends AppCompatActivity {
-    TextView NAME;
-    TextView NUMBER;
+    TextView rsNAME,menuName;
+    TextView NUMBER,PRICE;
     TextView ADRRESS;
-    ImageView RSIMAGE;
+    ImageView RSIMAGE,MENUIMAGE;
 
     String TAG = "food";
 
-    private RSdbHelper mDbHelper;
+    private RSdbHelper rsDbHelper;
+    private MENUdbHelper menuDbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,27 +39,31 @@ public class RestaurantDetail extends AppCompatActivity {
         setContentView(R.layout.menulist); // restaurant 레이아웃의 틀을 기반으로한다.
 
         RSIMAGE = (ImageView) findViewById(R.id.rsimage);
-        NAME = (TextView) findViewById(R.id.name);
+        rsNAME = (TextView) findViewById(R.id.name);
         NUMBER = (TextView) findViewById(R.id.number);
         ADRRESS = (TextView) findViewById(R.id.adrress);
 
-        mDbHelper = new RSdbHelper(this);
+        MENUIMAGE = (ImageView) findViewById(R.id.MenuImage);
+        menuName = (TextView) findViewById(R.id.MenuName);
+        PRICE = (TextView) findViewById(R.id.MenuPrice);
+
+        rsDbHelper = new RSdbHelper(this);
         Log.i(TAG, getLocalClassName() + " :printdb");
-        viewAllToListView();
+        viewRSToListView();
+        //viewMENUToListView();
 
     }
 
 
     // ResisRS에서 받아온 정보 나타내기-------------------------------------------------------------
-    private void viewAllToListView() {
-        Uri imageUri = getIntent().getData();//https://stackoverflow.com/questions/8017374/how-to-pass-a-uri-to-an-intent참조
+    private void viewRSToListView() {
+        Uri RSUri = getIntent().getData();//https://stackoverflow.com/questions/8017374/how-to-pass-a-uri-to-an-intent참조
         //맛집 등록에서 찍은 사진 Uri받음
-        RSIMAGE.setImageURI(imageUri);
+        RSIMAGE.setImageURI(RSUri);
 
-        Cursor cursor = mDbHelper.getRSByMethod();
+        Cursor cursor = rsDbHelper.getRSByMethod();
         if (cursor.moveToLast()) {
-            RSIMAGE.setImageURI(imageUri);
-            NAME.setText(cursor.getString(1));
+            rsNAME.setText(cursor.getString(1));
             NUMBER.setText(cursor.getString(2));
             ADRRESS.setText(cursor.getString(3));
         }
@@ -75,14 +81,33 @@ public class RestaurantDetail extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.quick_add:
                 Log.i(TAG, getLocalClassName() + " :click");
-                Intent ResistMenu = new Intent(getApplicationContext(), SR_fry.class);
-                startActivity(ResistMenu);
+                startActivity(new Intent(getApplicationContext(), ResistMenu.class));
                 Log.i(TAG, getLocalClassName() + " :changeActivity");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
+
+    //추가된 메뉴 list 나타내기---------------------------------------------------------------------
+    private void viewMENUToListView() {
+        Uri MENUUri = getIntent().getData();
+        //메뉴 등록에서 찍은 사진 Uri받음
+        MENUIMAGE.setImageURI(MENUUri);
+
+        Cursor cursor = menuDbHelper.getMENUByMethod();
+        SimpleCursorAdapter adapter = new SimpleCursorAdapter(getApplicationContext(),
+                R.layout.menu, cursor, new String[]{
+                MENUdb.Menu.KEY_menu,
+                MENUdb.Menu.KEY_price},
+                new int[]{ R.id.MenuName, R.id.MenuPrice}, 0);
+
+        ListView listView = (ListView)findViewById(R.id.listview);
+        listView.setAdapter(adapter);
+    }
+
+
 }
 
 
