@@ -11,7 +11,7 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/RS_Image"
+            android:id="@+id/MENU_Image"
             android:layout_width="300dp"
             android:layout_height="240dp"
             android:layout_gravity="center"
@@ -20,16 +20,19 @@
             android:src="@drawable/icon_camera" />
 
         <EditText
+            android:id="@+id/MENUname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/menuname" />
 
         <EditText
+            android:id="@+id/MENUprice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/price" />
 
         <EditText
+            android:id="@+id/MENUcoment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/detail" />
@@ -39,7 +42,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <Button
-            android:id="@+id/Resist_RS"
+            android:id="@+id/Resist_MENU"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text = "@string/resistMENU"/>
