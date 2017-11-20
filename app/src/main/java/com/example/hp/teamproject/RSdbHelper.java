@@ -19,12 +19,12 @@ public class RSdbHelper extends SQLiteOpenHelper {
 
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(RSdb.Restaurant.CREATE_TABLE);
-        //db.execSQL(RSdb.Menu.CREATE_TABLE);
+        db.execSQL(RSdb.Menu.CREATE_TABLE2);
     }
 
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
         db.execSQL(RSdb.Restaurant.DELETE_TABLE);
-        //db.execSQL(RSdb.Menu.DELETE_TABLE);
+        db.execSQL(RSdb.Menu.DELETE_TABLE2);
         onCreate(db);
     }
 
@@ -39,9 +39,22 @@ public class RSdbHelper extends SQLiteOpenHelper {
         return db.insert(RSdb.Restaurant.TABLE_NAME, null, values);
     }
 
+    public long insertMENUByMethod(String menu, String price, String comment) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(RSdb.Menu.KEY_menu, menu);
+        values.put(RSdb.Menu.KEY_price, price);
+        values.put(RSdb.Menu.KEY_comment, comment);
+        return db.insert(RSdb.Menu.TABLE_NAME2,null, values);
+    }
+
     public Cursor getRSByMethod() {
         SQLiteDatabase db = getReadableDatabase();
         return db.query(RSdb.Restaurant.TABLE_NAME,null,null,null,null,null,null);
+    }
+    public Cursor getMenuByMethod() {
+        SQLiteDatabase db = getReadableDatabase();
+        return db.query(RSdb.Menu.TABLE_NAME2,null,null,null,null,null,null);
     }
 
     /*//메뉴 정보 db에 저장---------------------------------------------------------------------------

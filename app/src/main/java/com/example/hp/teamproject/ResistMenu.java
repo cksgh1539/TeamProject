@@ -30,7 +30,7 @@ public class ResistMenu extends AppCompatActivity {
     EditText MENUcomment;
     String mPhotoFileName = null;
     File mPhotoFile = null;
-    private MENUdbHelper mDbHelper;
+    private RSdbHelper mDbHelper;
 
     String TAG = "food";
 
@@ -40,7 +40,7 @@ public class ResistMenu extends AppCompatActivity {
         setContentView(R.layout.resistmenu);
 
         checkDangerousPermissions();//permission획득 체크
-        mDbHelper = new MENUdbHelper(this);
+        mDbHelper = new RSdbHelper(this);
 
         ImageView RSimage = (ImageView)findViewById(R.id.MENU_Image);
         RSimage.setOnClickListener(new View.OnClickListener() {

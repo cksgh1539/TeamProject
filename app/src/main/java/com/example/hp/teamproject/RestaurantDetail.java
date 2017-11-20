@@ -31,7 +31,7 @@ public class RestaurantDetail extends AppCompatActivity {
     String TAG = "food";
 
     private RSdbHelper rsDbHelper;
-    private MENUdbHelper menuDbHelper;
+   // private MENUdbHelper menuDbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,15 +96,21 @@ public class RestaurantDetail extends AppCompatActivity {
         //메뉴 등록에서 찍은 사진 Uri받음
         MENUIMAGE.setImageURI(MENUUri);
 
-        Cursor cursor = menuDbHelper.getMENUByMethod();
-        SimpleCursorAdapter adapter = new SimpleCursorAdapter(getApplicationContext(),
+        Cursor cursor = rsDbHelper.getMenuByMethod();
+       /* SimpleCursorAdapter adapter = new SimpleCursorAdapter(getApplicationContext(),
                 R.layout.menu, cursor, new String[]{
                 MENUdb.Menu.KEY_menu,
                 MENUdb.Menu.KEY_price},
                 new int[]{ R.id.MenuName, R.id.MenuPrice}, 0);
 
         ListView listView = (ListView)findViewById(R.id.listview);
-        listView.setAdapter(adapter);
+        listView.setAdapter(adapter);*/
+
+        if (cursor.moveToLast()) {
+            menuName.setText(cursor.getString(1));
+            PRICE.setText(cursor.getString(2));
+          //  ADRRESS.setText(cursor.getString(3));
+        }
     }
 
 

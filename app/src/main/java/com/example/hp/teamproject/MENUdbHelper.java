@@ -1,3 +1,4 @@
+/*
 package com.example.hp.teamproject;
 
 
@@ -38,3 +39,4 @@ public class MENUdbHelper extends SQLiteOpenHelper {
         return db.query(MENUdb.Menu.TABLE_NAME, null, null, null, null, null, null);
     }
 }
+*/
