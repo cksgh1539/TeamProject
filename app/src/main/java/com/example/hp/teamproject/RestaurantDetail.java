@@ -50,7 +50,7 @@ public class RestaurantDetail extends AppCompatActivity {
         rsDbHelper = new RSdbHelper(this);
         Log.i(TAG, getLocalClassName() + " :printdb");
         viewRSToListView();
-        //viewMENUToListView();
+        viewMENUToListView();
 
     }
 
@@ -92,25 +92,25 @@ public class RestaurantDetail extends AppCompatActivity {
 
     //추가된 메뉴 list 나타내기---------------------------------------------------------------------
     private void viewMENUToListView() {
-        Uri MENUUri = getIntent().getData();
+       // Uri MENUUri = getIntent().getData();
         //메뉴 등록에서 찍은 사진 Uri받음
-        MENUIMAGE.setImageURI(MENUUri);
+//        MENUIMAGE.setImageURI(MENUUri);
 
         Cursor cursor = rsDbHelper.getMenuByMethod();
-       /* SimpleCursorAdapter adapter = new SimpleCursorAdapter(getApplicationContext(),
+        SimpleCursorAdapter adapter = new SimpleCursorAdapter(getApplicationContext(),
                 R.layout.menu, cursor, new String[]{
-                MENUdb.Menu.KEY_menu,
-                MENUdb.Menu.KEY_price},
+                RSdb.Menu.KEY_menu,
+                RSdb.Menu.KEY_price},
                 new int[]{ R.id.MenuName, R.id.MenuPrice}, 0);
 
         ListView listView = (ListView)findViewById(R.id.listview);
-        listView.setAdapter(adapter);*/
+        listView.setAdapter(adapter);
 
-        if (cursor.moveToLast()) {
+      /*  if (cursor.moveToLast()) {
             menuName.setText(cursor.getString(1));
             PRICE.setText(cursor.getString(2));
           //  ADRRESS.setText(cursor.getString(3));
-        }
+        }*/
     }
 
 

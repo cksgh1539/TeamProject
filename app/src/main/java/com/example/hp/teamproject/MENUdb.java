@@ -1,3 +1,4 @@
+/*
 package com.example.hp.teamproject;
 
 
@@ -9,7 +10,9 @@ public class MENUdb {
     private static final String TEXT_TYPE = " TEXT";
     private static final String COMMA_SEP = ",";
 
-    /* Inner class that defines the table contents */
+    */
+/* Inner class that defines the table contents *//*
+
     public static class Menu implements BaseColumns {
         public static final String TABLE_NAME="ResisMenu";
         public static final String KEY_menu = "MENUname";
@@ -26,3 +29,4 @@ public class MENUdb {
     }
 }
 
+*/
