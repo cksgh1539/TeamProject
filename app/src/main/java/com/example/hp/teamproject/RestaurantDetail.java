@@ -36,7 +36,7 @@ public class RestaurantDetail extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.menulist); // restaurant 레이아웃의 틀을 기반으로한다.
+        setContentView(R.layout.menulist); // menulist 레이아웃의 틀을 기반으로한다.
 
         RSIMAGE = (ImageView) findViewById(R.id.rsimage);
         rsNAME = (TextView) findViewById(R.id.name);
@@ -51,6 +51,7 @@ public class RestaurantDetail extends AppCompatActivity {
         Log.i(TAG, getLocalClassName() + " :printdb");
         viewRSToListView();
         viewMENUToListView();
+
 
     }
 
@@ -109,7 +110,16 @@ final FoodAdapter adapter = new FoodAdapter(Menuinfo, this, R.layout.menu);
     ListView listView = (ListView) findViewById(R.id.listview);
     listView.setAdapter(adapter);
     listView.setDividerHeight(5);
-        }
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View vClicked, int position, long id) {
+                Intent intent = new Intent(getApplicationContext(), FoodDetail.class);
+
+                intent.putExtra("Position",position);
+                startActivity(intent);
+            }
+        });
+    }
 
     }
 

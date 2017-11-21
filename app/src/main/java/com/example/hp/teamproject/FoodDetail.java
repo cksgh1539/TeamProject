@@ -1,8 +1,10 @@
 package com.example.hp.teamproject;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -16,30 +18,35 @@ import android.widget.TextView;
 
 public class FoodDetail extends AppCompatActivity {
 
+
     static final String TAG = "Chan";
 
+    ImageView MenuImg;
+    TextView MenuName,MenuPrice,MenuComment;
+    private RSdbHelper MenuDB;
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fooddetail); // fooddetail 레이아웃의 틀을 기반으로 합니다.
+        MenuDB = new RSdbHelper(this);
 
-        Intent intent = getIntent(); //데이터들을 받아옵니다.
+        Intent intent = getIntent();
+        int Position = intent.getExtras().getInt("Position");
 
-        int Image = intent.getExtras().getInt("Image");
-        String name = intent.getExtras().getString("Name");
-        String price = intent.getExtras().getString("Price");
-        String score = intent.getExtras().getString("Score");
+        MenuImg = (ImageView) findViewById(R.id.imageView);
+        MenuName = (TextView) findViewById(R.id.Name);
+        MenuPrice = (TextView) findViewById(R.id.Price);
+        MenuComment = (TextView) findViewById(R.id.Comment);
 
-        TextView txt = (TextView)findViewById(R.id.Name);  // fooddetail 레이웃의 정의된 ID들을 사용
-        TextView txt2 = (TextView)findViewById(R.id.Price);
-        TextView txt3 = (TextView)findViewById(R.id.Score);
-        ImageView img = (ImageView)findViewById(R.id.imageView);
+             Cursor  cursor= MenuDB.getMenuByMethod();
+            cursor.moveToPosition(Position);
 
-        img.setImageResource(Image);
-        txt.setText(name);
-        txt2.setText(price);
-        txt3.setText(score);
+                 Uri Img = Uri.parse(cursor.getString(1));
+                MenuImg.setImageURI(Img);
+                MenuName.setText(cursor.getString(2));
+               MenuPrice.setText(cursor.getString(3));
+              MenuComment.setText(cursor.getString(4));
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {

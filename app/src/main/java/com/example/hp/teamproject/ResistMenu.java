@@ -32,7 +32,7 @@ public class ResistMenu extends AppCompatActivity {
     String mPhotoFileName = null;
     File mPhotoFile = null;
     private RSdbHelper mDbHelper;
-    FoodAdapter adapter;
+   // FoodAdapter adapter;
 
     String TAG = "food";
 

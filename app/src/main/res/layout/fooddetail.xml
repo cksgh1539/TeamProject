@@ -12,30 +12,30 @@
         android:layout_gravity="top"
         android:padding="8dp"
         android:scaleType="centerInside"
-        android:visibility="visible" />
+        android:contentDescription="TODO"/>
 
     <TextView
         android:id="@+id/Name"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:gravity="center_vertical|center_horizontal"
-        android:textSize="20dp" />
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/Price"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:gravity="center_vertical|center_horizontal"
-        android:textSize="20dp" />
+        android:textSize="20sp" />
 
     <TextView
 
-        android:id="@+id/Score"
+        android:id="@+id/Comment"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:gravity="center_vertical|center_horizontal"
         android:textColor="@android:color/holo_red_light"
-        android:textSize="20dp" />
+        android:textSize="20sp" />
 
 </LinearLayout>
 

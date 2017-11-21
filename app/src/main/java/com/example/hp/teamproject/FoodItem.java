@@ -7,13 +7,13 @@ public class FoodItem {
     private String Pict;
     private String Name;
     private String Price;
-    private String Score;
+    private String Comment;
 
     FoodItem(String Picture, String Name, String Price, String Score){
         this.Pict = Picture;
         this.Name = Name;
         this.Price = Price;
-        this.Score = Score;
+        this.Comment = Comment;
     }
 
     public String getPicture(){return  Pict;}
@@ -23,6 +23,6 @@ public class FoodItem {
     public String getPrice(){
         return  Price;
     }
-    public String getScore(){return Score;}
+    public String getComment(){return Comment;}
 
 }

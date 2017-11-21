@@ -30,6 +30,10 @@
             android:parentActivityName=".ResistRS">
         </activity>
 
+        <activity android:name=".FoodDetail"
+            android:parentActivityName=".RestaurantDetail">
+        </activity>
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.example.hp.teamproject"
