@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class ResistMenu extends AppCompatActivity {
@@ -31,6 +32,7 @@ public class ResistMenu extends AppCompatActivity {
     String mPhotoFileName = null;
     File mPhotoFile = null;
     private RSdbHelper mDbHelper;
+    FoodAdapter adapter;
 
     String TAG = "food";
 
@@ -126,14 +128,18 @@ public class ResistMenu extends AppCompatActivity {
         MENUcomment = (EditText)findViewById(R.id.MENUcomment); // 맛집 주소 입력
 
         long nOfRows = mDbHelper.insertMENUByMethod
-                (MENUname.getText().toString(),MENUprice.getText().toString(), MENUcomment.getText().toString());
+                ("file:///storage/emulated/0/Pictures/"+mPhotoFileName,
+                        MENUname.getText().toString(),MENUprice.getText().toString(), MENUcomment.getText().toString());
+
         Log.i(TAG, getLocalClassName() + " :insert" +MENUname.getText().toString()+ MENUprice.getText().toString()+MENUcomment.getText().toString());
+
+     //  Uri MEMUUri2 = Uri.parse("file:///storage/emulated/0/Pictures/"+mPhotoFileName);
 
         if(nOfRows > 0) {
             Toast.makeText(this, "메뉴 등록중...", Toast.LENGTH_SHORT).show();
 
             Intent RestaurantDetail = new Intent(getApplicationContext(), RestaurantDetail.class);
-            RestaurantDetail.setData(MENUUri); //Intent로 찍은 사진의 uri값을 넘겨줌
+           // RestaurantDetail.setData(MEMUUri2); //Intent로 찍은 사진의 uri값을 넘겨줌
 
             startActivity(RestaurantDetail);
         }else Toast.makeText(this,"[Error] Try again",Toast.LENGTH_SHORT).show();

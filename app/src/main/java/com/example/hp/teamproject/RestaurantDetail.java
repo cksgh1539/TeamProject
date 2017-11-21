@@ -21,6 +21,7 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import java.net.URI;
+import java.util.ArrayList;
 
 public class RestaurantDetail extends AppCompatActivity {
     TextView rsNAME,menuName;
@@ -31,7 +32,6 @@ public class RestaurantDetail extends AppCompatActivity {
     String TAG = "food";
 
     private RSdbHelper rsDbHelper;
-   // private MENUdbHelper menuDbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,20 +55,6 @@ public class RestaurantDetail extends AppCompatActivity {
     }
 
 
-    // ResisRS에서 받아온 정보 나타내기-------------------------------------------------------------
-    private void viewRSToListView() {
-        Uri RSUri = getIntent().getData();//https://stackoverflow.com/questions/8017374/how-to-pass-a-uri-to-an-intent참조
-        //맛집 등록에서 찍은 사진 Uri받음
-        RSIMAGE.setImageURI(RSUri);
-
-        Cursor cursor = rsDbHelper.getRSByMethod();
-        if (cursor.moveToLast()) {
-            rsNAME.setText(cursor.getString(1));
-            NUMBER.setText(cursor.getString(2));
-            ADRRESS.setText(cursor.getString(3));
-        }
-    }
-
     // 메뉴 추가 액션바 구현 -----------------------------------------------------------------------
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -89,31 +75,46 @@ public class RestaurantDetail extends AppCompatActivity {
         }
     }
 
+    // ResisRS에서 받아온 정보 나타내기-------------------------------------------------------------
+    private void viewRSToListView() {
+        Cursor RS = rsDbHelper.getRSByMethod();
+        RS.moveToLast();
+
+        String RSImg = RS.getString(1);
+        Uri RSUri = Uri.parse(RSImg);
+        RSIMAGE.setImageURI(RSUri);
+
+        Cursor cursor = rsDbHelper.getRSByMethod();
+        if (cursor.moveToLast()) {
+            rsNAME.setText(cursor.getString(2));
+            NUMBER.setText(cursor.getString(3));
+            ADRRESS.setText(cursor.getString(4));
+        }
+    }
 
     //추가된 메뉴 list 나타내기---------------------------------------------------------------------
     private void viewMENUToListView() {
-       // Uri MENUUri = getIntent().getData();
-        //메뉴 등록에서 찍은 사진 Uri받음
-//        MENUIMAGE.setImageURI(MENUUri);
+        Cursor Menu = rsDbHelper.getMenuByMethod();
 
-        Cursor cursor = rsDbHelper.getMenuByMethod();
-        SimpleCursorAdapter adapter = new SimpleCursorAdapter(getApplicationContext(),
-                R.layout.menu, cursor, new String[]{
-                RSdb.Menu.KEY_menu,
-                RSdb.Menu.KEY_price},
-                new int[]{ R.id.MenuName, R.id.MenuPrice}, 0);
+        ArrayList<FoodItem> Menuinfo = new ArrayList<>();
 
-        ListView listView = (ListView)findViewById(R.id.listview);
-        listView.setAdapter(adapter);
+        while(Menu.moveToNext()) {
+          Menuinfo.add(new FoodItem(Menu.getString(1),
+            Menu.getString(2),
+            Menu.getString(3),
+            Menu.getString(4)));
+}
+final FoodAdapter adapter = new FoodAdapter(Menuinfo, this, R.layout.menu);
 
-      /*  if (cursor.moveToLast()) {
-            menuName.setText(cursor.getString(1));
-            PRICE.setText(cursor.getString(2));
-          //  ADRRESS.setText(cursor.getString(3));
-        }*/
+    ListView listView = (ListView) findViewById(R.id.listview);
+    listView.setAdapter(adapter);
+    listView.setDividerHeight(5);
+        }
+
     }
 
 
-}
+
+
 
 

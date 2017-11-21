@@ -137,14 +137,16 @@ public class ResistRS extends AppCompatActivity{
         RSadrress = (EditText)findViewById(R.id.RSadrress); // 맛집 주소 입력
 
         long nOfRows = mDbHelper.insertRSByMethod
-                ( RSname.getText().toString(),RSnum.getText().toString(), RSadrress.getText().toString());
+                ( "file:///storage/emulated/0/Pictures/"+mPhotoFileName,RSname.getText().toString(),RSnum.getText().toString(), RSadrress.getText().toString());
         Log.i(TAG, getLocalClassName() + " :insert" + nOfRows);
+
+      //  Uri RSUri2 = Uri.parse("file:///storage/emulated/0/Pictures/"+mPhotoFileName);
 
         if(nOfRows > 0) {
             Toast.makeText(this, "맛집 등록중...", Toast.LENGTH_SHORT).show();
 
             Intent RestaurantDetail = new Intent(getApplicationContext(), RestaurantDetail.class);
-            RestaurantDetail.setData(RSUri); //Intent로 찍은 사진의 uri값을 넘겨줌
+           // RestaurantDetail.setData(RSUri2); //Intent로 찍은 사진의 uri값을 넘겨줌
 
             startActivity(RestaurantDetail);
         }else Toast.makeText(this,"[Error] Try again",Toast.LENGTH_SHORT).show();

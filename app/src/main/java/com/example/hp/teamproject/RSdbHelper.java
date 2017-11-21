@@ -29,9 +29,10 @@ public class RSdbHelper extends SQLiteOpenHelper {
     }
 
     //맛집 정보 db에 저장---------------------------------------------------------------------------
-    public long insertRSByMethod(String name, String num, String adrress) {
+    public long insertRSByMethod(String ImageRS,String name, String num, String adrress) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
+        values.put(RSdb.Restaurant.KEY_ImageRS,ImageRS);
         values.put(RSdb.Restaurant.KEY_name, name);
         values.put(RSdb.Restaurant.KEY_num, num);
         values.put(RSdb.Restaurant.KEY_adrress, adrress);
@@ -39,9 +40,10 @@ public class RSdbHelper extends SQLiteOpenHelper {
         return db.insert(RSdb.Restaurant.TABLE_NAME, null, values);
     }
 
-    public long insertMENUByMethod(String menu, String price, String comment) {
+    public long insertMENUByMethod(String ImageMenu,String menu, String price, String comment) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
+        values.put(RSdb.Menu.KEY_ImageMenu,ImageMenu);
         values.put(RSdb.Menu.KEY_menu, menu);
         values.put(RSdb.Menu.KEY_price, price);
         values.put(RSdb.Menu.KEY_comment, comment);
@@ -57,18 +59,4 @@ public class RSdbHelper extends SQLiteOpenHelper {
         return db.query(RSdb.Menu.TABLE_NAME2,null,null,null,null,null,null);
     }
 
-    /*//메뉴 정보 db에 저장---------------------------------------------------------------------------
-    public long insertMENUByMethod(String menu, String price, String comment) {
-        SQLiteDatabase db = getWritableDatabase();
-        ContentValues values2 = new ContentValues();
-        values2.put(RSdb.Menu.KEY_menu, menu);
-        values2.put(RSdb.Menu.KEY_price, price);
-        values2.put(RSdb.Menu.KEY_comment, comment);
-        return db.insert(RSdb.Menu.TABLE_NAME, null, values2);
-    }
-
-    public Cursor getMENUByMethod() {
-        SQLiteDatabase db = getReadableDatabase();
-        return db.query(RSdb.Menu.TABLE_NAME,null,null,null,null,null,null);
-    }*/
 }
