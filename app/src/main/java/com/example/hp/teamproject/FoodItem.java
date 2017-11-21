@@ -9,11 +9,11 @@ public class FoodItem {
     private String Price;
     private String Comment;
 
-    FoodItem(String Picture, String Name, String Price, String Score){
+    FoodItem(String Picture, String Name, String Price){
         this.Pict = Picture;
         this.Name = Name;
         this.Price = Price;
-        this.Comment = Comment;
+      //  this.Comment = Comment;
     }
 
     public String getPicture(){return  Pict;}
@@ -23,6 +23,6 @@ public class FoodItem {
     public String getPrice(){
         return  Price;
     }
-    public String getComment(){return Comment;}
+   // public String getComment(){return Comment;}
 
 }

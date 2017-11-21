@@ -138,7 +138,7 @@ public class ResistMenu extends AppCompatActivity {
         if(nOfRows > 0) {
             Toast.makeText(this, "메뉴 등록중...", Toast.LENGTH_SHORT).show();
 
-            Intent RestaurantDetail = new Intent(getApplicationContext(), RestaurantDetail.class);
+            Intent RestaurantDetail = new Intent(getApplicationContext(), Test.class);
            // RestaurantDetail.setData(MEMUUri2); //Intent로 찍은 사진의 uri값을 넘겨줌
 
             startActivity(RestaurantDetail);

@@ -1,6 +1,7 @@
 package com.example.hp.teamproject;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -18,8 +19,24 @@ import android.widget.TextView;
 
 public class FoodDetail extends AppCompatActivity {
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_details);
 
-    static final String TAG = "Chan";
+        if (getResources().getConfiguration().orientation
+                == Configuration.ORIENTATION_LANDSCAPE) {
+            finish();
+            return;
+        }
+
+        FoodDetailFrag details = new FoodDetailFrag();
+        details.setSelection(getIntent().getIntExtra("index",-1));
+        getSupportFragmentManager().beginTransaction().replace(R.id.details, details).commit();
+    }
+
+
+    /*static final String TAG = "Chan";
 
     ImageView MenuImg;
     TextView MenuName,MenuPrice,MenuComment;
@@ -88,7 +105,7 @@ public class FoodDetail extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         Log.i(TAG, getLocalClassName() + ".onDestroy");
-    }
+    }*/
 
 
 }

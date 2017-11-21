@@ -145,10 +145,10 @@ public class ResistRS extends AppCompatActivity{
         if(nOfRows > 0) {
             Toast.makeText(this, "맛집 등록중...", Toast.LENGTH_SHORT).show();
 
-            Intent RestaurantDetail = new Intent(getApplicationContext(), RestaurantDetail.class);
+            Intent TestRS = new Intent(getApplicationContext(), Test.class);
            // RestaurantDetail.setData(RSUri2); //Intent로 찍은 사진의 uri값을 넘겨줌
 
-            startActivity(RestaurantDetail);
+            startActivity(TestRS);
         }else Toast.makeText(this,"[Error] Try again",Toast.LENGTH_SHORT).show();
     }
 

@@ -1,3 +1,4 @@
+/*
 package com.example.hp.teamproject;
 //메뉴 등록 액티비티-------------------------------------------------------
 
@@ -119,12 +120,12 @@ final FoodAdapter adapter = new FoodAdapter(Menuinfo, this, R.layout.menu);
                 startActivity(intent);
             }
         });
+      }
     }
 
-    }
 
 
 
 
 
-
+*/

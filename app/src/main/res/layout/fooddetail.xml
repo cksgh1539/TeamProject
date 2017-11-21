@@ -1,9 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="5dp"
     android:orientation="vertical"
-    >
+    tools:context="com.example.hp.teamproject.FoodDetail">
 
     <ImageView
         android:id="@+id/imageView"
@@ -12,7 +13,7 @@
         android:layout_gravity="top"
         android:padding="8dp"
         android:scaleType="centerInside"
-        android:contentDescription="TODO"/>
+        android:contentDescription="TODO" />
 
     <TextView
         android:id="@+id/Name"
