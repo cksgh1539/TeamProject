@@ -43,7 +43,9 @@ public class FoodDetailFrag extends Fragment {
         MenuDB = new RSdbHelper(getActivity());
 
         Intent intent = getActivity().getIntent();
-        int Position = intent.getExtras().getInt("Position");
+
+          //  int Position = intent.getExtras().getInt("Position");
+
 
         MenuImg = (ImageView) view.findViewById(R.id.imageView);
         MenuName = (TextView) view.findViewById(R.id.Name);
@@ -51,7 +53,8 @@ public class FoodDetailFrag extends Fragment {
         MenuComment = (TextView) view.findViewById(R.id.Comment);
 
         Cursor cursor= MenuDB.getMenuByMethod();
-        cursor.moveToPosition(Position);
+        if(index >= 0)
+        cursor.moveToPosition(index);
 
         Uri Img = Uri.parse(cursor.getString(1));
         MenuImg.setImageURI(Img);

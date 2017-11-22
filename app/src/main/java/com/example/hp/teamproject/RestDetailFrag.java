@@ -114,12 +114,15 @@ public class RestDetailFrag extends Fragment {
 
        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View vClicked, int position, long id) {
-                Intent intent = new Intent(getActivity(), FoodDetail.class);
-
+               /* Intent intent = new Intent(getActivity(), FoodDetail.class);
                 intent.putExtra("Position",position);
-                startActivity(intent);
+                startActivity(intent);*/
+               mCurCheckPosition = position;
+               Activity activity = getActivity();
+                ((OnTitleSelectedListener)activity).onTitleSelected(position);
             }
         });
+        listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
     }
 
     public void calling() {
