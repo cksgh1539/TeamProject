@@ -11,7 +11,7 @@ public final class RSdb {
     private static final String TEXT_TYPE = " TEXT";
     private static final String COMMA_SEP = ",";
 
-    /* Inner class that defines the table contents */
+ //식당 정보 받는 테이블
     public static class Restaurant implements BaseColumns {
         public static final String TABLE_NAME="ResisRestaurant";
         public static final String KEY_ImageRS = "RSImage";
@@ -29,7 +29,7 @@ public final class RSdb {
 
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
-
+//메뉴정보 받는 테이블
     public static class Menu implements BaseColumns {
         public static final String TABLE_NAME2="ResisMenu";
         public static final String KEY_ImageMenu = "MENUImage";

@@ -23,15 +23,15 @@
         </activity>
 
         <activity android:name=".ResistMenu"
-            android:parentActivityName=".Test">
+            android:parentActivityName=".MainRestaurant">
         </activity>
 
-        <activity android:name=".Test"
+        <activity android:name=".MainRestaurant"
             android:parentActivityName=".ResistRS">
         </activity>
 
         <activity android:name=".FoodDetail"
-            android:parentActivityName=".Test">
+            android:parentActivityName=".MainRestaurant">
         </activity>
 
         <provider

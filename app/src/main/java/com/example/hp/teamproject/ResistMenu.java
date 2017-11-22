@@ -3,7 +3,6 @@ package com.example.hp.teamproject;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -21,7 +20,6 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 public class ResistMenu extends AppCompatActivity {
@@ -32,7 +30,7 @@ public class ResistMenu extends AppCompatActivity {
     String mPhotoFileName = null;
     File mPhotoFile = null;
     private RSdbHelper mDbHelper;
-   // FoodAdapter adapter;
+
 
     String TAG = "food";
 
@@ -55,7 +53,6 @@ public class ResistMenu extends AppCompatActivity {
         ResistRS.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 insertRecord();
-                //viewAllToListView();
             }
         });
     }
@@ -115,12 +112,6 @@ public class ResistMenu extends AppCompatActivity {
         }
     }
 
-    private String currentDateFormat(){
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HH_mm_ss");
-        String currentTimeStamp = dateFormat.format(new Date());
-        return currentTimeStamp;
-    }
-
     // 메뉴 정보 db에 등록하기----------------------------------------------------------------------
     private void insertRecord() {
         MENUname = (EditText)findViewById(R.id.MENUname); //맛집 이름 입력
@@ -133,16 +124,19 @@ public class ResistMenu extends AppCompatActivity {
 
         Log.i(TAG, getLocalClassName() + " :insert" +MENUname.getText().toString()+ MENUprice.getText().toString()+MENUcomment.getText().toString());
 
-     //  Uri MEMUUri2 = Uri.parse("file:///storage/emulated/0/Pictures/"+mPhotoFileName);
 
         if(nOfRows > 0) {
             Toast.makeText(this, "메뉴 등록중...", Toast.LENGTH_SHORT).show();
-
-            Intent RestaurantDetail = new Intent(getApplicationContext(), Test.class);
-           // RestaurantDetail.setData(MEMUUri2); //Intent로 찍은 사진의 uri값을 넘겨줌
-
+            Intent RestaurantDetail = new Intent(getApplicationContext(), MainRestaurant.class);
             startActivity(RestaurantDetail);
         }else Toast.makeText(this,"[Error] Try again",Toast.LENGTH_SHORT).show();
+    }
+
+
+    private String currentDateFormat(){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HH_mm_ss");
+        String currentTimeStamp = dateFormat.format(new Date());
+        return currentTimeStamp;
     }
 
     //permission확인 메소드-------------------------------------------------------------------------

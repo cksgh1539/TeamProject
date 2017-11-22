@@ -9,19 +9,18 @@ import android.support.v7.app.AppCompatActivity;
  * Created by hp on 2017-11-21.
  */
 
-public class Test extends AppCompatActivity implements RestDetailFrag.OnTitleSelectedListener{
+public class MainRestaurant extends AppCompatActivity implements MainRSfragment.OnTitleSelectedListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.testfrag);
+        setContentView(R.layout.main_rs);
     }
 
     public void onTitleSelected(int i) {
         if (getResources().getConfiguration().orientation
                 == Configuration.ORIENTATION_LANDSCAPE) {
             FoodDetailFrag details = new FoodDetailFrag();
-           // details.setSelection(getIntent().getIntExtra("index",-1));
             details.setSelection(i);
             getSupportFragmentManager().beginTransaction().replace(R.id.details, details).commit();
 

@@ -4,32 +4,22 @@ package com.example.hp.teamproject;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.provider.SyncStateContract;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Adapter;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
 import java.io.File;
-import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -41,7 +31,7 @@ public class ResistRS extends AppCompatActivity{
     String mPhotoFileName = null;
     File mPhotoFile = null;
 
-    String TAG = "food";
+    String TAG = "RestRS";
 
     private RSdbHelper mDbHelper;
 
@@ -145,13 +135,12 @@ public class ResistRS extends AppCompatActivity{
         if(nOfRows > 0) {
             Toast.makeText(this, "맛집 등록중...", Toast.LENGTH_SHORT).show();
 
-            Intent TestRS = new Intent(getApplicationContext(), Test.class);
+            Intent TestRS = new Intent(getApplicationContext(), MainRestaurant.class);
            // RestaurantDetail.setData(RSUri2); //Intent로 찍은 사진의 uri값을 넘겨줌
 
             startActivity(TestRS);
         }else Toast.makeText(this,"[Error] Try again",Toast.LENGTH_SHORT).show();
     }
-
 
     //permission확인 메소드-------------------------------------------------------------------------
     final int  REQUEST_EXTERNAL_STORAGE_FOR_MULTIMEDIA=1;
@@ -172,44 +161,4 @@ public class ResistRS extends AppCompatActivity{
             ActivityCompat.requestPermissions(this, permissions, REQUEST_EXTERNAL_STORAGE_FOR_MULTIMEDIA);
         }
     }
-
-
-    /* private void viewAllToListView() {  //일단 버튼 밑 listview에 불러오기(원래 RestaurantDetail로 넘겨야함)
-        Log.i(TAG, getLocalClassName() + " = load");
-        Cursor cursor = mDbHelper.getAllUsersByMethod();
-
-        SimpleCursorAdapter adapter = new SimpleCursorAdapter(getApplicationContext(),
-                R.layout.rstaurantitem, cursor, new String[]{
-                RSdb.Restaurant.KEY_name,
-                RSdb.Restaurant.KEY_num,
-                RSdb.Restaurant.KEY_adrress},
-                new int[]{R.id.name, R.id.number, R.id.adrress}, 0);
-
-        ListView lv = (ListView)findViewById(R.id.listview);
-        lv.setAdapter(adapter);
-
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Adapter adapter = adapterView.getAdapter();
-                RSname.setText(((Cursor)adapter.getItem(i)).getString(1));
-                RSnum.setText(((Cursor)adapter.getItem(i)).getString(2));
-                RSadrress.setText(((Cursor)adapter.getItem(i)).getString(3));
-            }
-        });
-        lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-    }*/
-
-
-  /*
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.quick_add:
-
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }*/
 }

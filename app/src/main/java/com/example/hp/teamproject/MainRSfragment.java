@@ -7,7 +7,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,23 +20,18 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import static android.content.Intent.ACTION_DIAL;
-
 /**
  * Created by hp on 2017-11-21.
  */
 
-public class RestDetailFrag extends Fragment {
+public class MainRSfragment extends Fragment {
 
     TextView rsNAME,menuName;
     TextView NUMBER,PRICE;
     TextView ADRRESS;
     ImageView RSIMAGE,MENUIMAGE,ImagePhone;
 
-    String TAG = "food";
-
     private RSdbHelper rsDbHelper;
-   // private MenuInflater menuInflater;
 
     int mCurCheckPosition = -1;
 
@@ -45,15 +39,14 @@ public class RestDetailFrag extends Fragment {
         public void onTitleSelected(int i);
     }
 
-    public RestDetailFrag() {
+    public MainRSfragment() {
         // Required empty public constructor
     }
-
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        final View rootView = (View)inflater.inflate(R.layout.menulist,container,false);
+        final View rootView = (View)inflater.inflate(R.layout.frag_main_rs,container,false);
         setHasOptionsMenu(true);
         RSIMAGE = (ImageView) rootView.findViewById(R.id.rsimage);
         rsNAME = (TextView) rootView.findViewById(R.id.name);
@@ -79,6 +72,7 @@ public class RestDetailFrag extends Fragment {
         return rootView;
     }
 
+//맛집 정보 출력
    private void viewRSToListView() {
 
         Cursor RS = rsDbHelper.getRSByMethod();
@@ -95,7 +89,7 @@ public class RestDetailFrag extends Fragment {
             ADRRESS.setText(RS.getString(4));
         }
     }
-
+//메뉴 리스트
     private void viewMENUToListView(View view) {
         Cursor Menu = rsDbHelper.getMenuByMethod();
 
@@ -114,9 +108,6 @@ public class RestDetailFrag extends Fragment {
 
        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View vClicked, int position, long id) {
-               /* Intent intent = new Intent(getActivity(), FoodDetail.class);
-                intent.putExtra("Position",position);
-                startActivity(intent);*/
                mCurCheckPosition = position;
                Activity activity = getActivity();
                 ((OnTitleSelectedListener)activity).onTitleSelected(position);
@@ -125,6 +116,7 @@ public class RestDetailFrag extends Fragment {
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
     }
 
+//전화 거는 메소드
     public void calling() {
         Cursor Call = rsDbHelper.getRSByMethod();
                 Call.moveToLast();
@@ -139,7 +131,7 @@ public class RestDetailFrag extends Fragment {
         menuInflater.inflate(R.menu.main_menu, menu);
 
     }
-
+//메뉴 추가하는 메소드
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.quick_add:
