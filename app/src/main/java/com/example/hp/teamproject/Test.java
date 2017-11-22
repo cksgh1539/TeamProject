@@ -20,9 +20,13 @@ public class Test extends AppCompatActivity implements RestDetailFrag.OnTitleSel
     public void onTitleSelected(int i) {
         if (getResources().getConfiguration().orientation
                 == Configuration.ORIENTATION_LANDSCAPE) {
-            FoodDetailFrag detailsFragment = new FoodDetailFrag();
-            detailsFragment.setSelection(i);
-            getSupportFragmentManager().beginTransaction().replace(R.id.details, detailsFragment).commit();
+            FoodDetailFrag details = new FoodDetailFrag();
+            details.setSelection(getIntent().getIntExtra("index",-1));
+            getSupportFragmentManager().beginTransaction().replace(R.id.details, details).commit();
+       /*   yyyy tails = new yyyy();
+            tails.setSelection(getIntent().getIntExtra("index",-1));
+            getSupportFragmentManager().beginTransaction().replace(R.id.details, tails).commit();*/
+
         } else {
             Intent intent = new Intent(this, FoodDetail.class);
             intent.putExtra("index", i);

@@ -1,4 +1,5 @@
-package com.example.hp.teamproject;/*
+/*
+
 package com.example.hp.teamproject;
 
 //메뉴 세분화 리스트들이 나오는 뷰입니다.
@@ -114,5 +115,7 @@ public class SR_noodle extends AppCompatActivity {
 
 
 }
+
+
 
 */
