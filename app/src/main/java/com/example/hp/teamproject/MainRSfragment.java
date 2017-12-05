@@ -126,12 +126,13 @@ public class MainRSfragment extends Fragment {
                 startActivity(call);
     }
 
+    //메뉴 추가하는 메소드
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         super.onCreateOptionsMenu(menu, menuInflater);
-        menuInflater.inflate(R.menu.main_menu, menu);
+        menuInflater.inflate(R.menu.resist, menu);
 
     }
-//메뉴 추가하는 메소드
+
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.quick_add:

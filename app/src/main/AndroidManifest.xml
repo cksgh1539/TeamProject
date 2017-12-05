@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.hp.teamproject">
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.CALL_PHONE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
@@ -13,13 +14,26 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <uses-library android:name="com.google.android.maps"/>
 
-        <activity android:name=".ResistRS">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyA4_A3OxaHGgHRzl4TEZFKmX24yMDkrqt0" />
+
+        <activity android:name=".SplashActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+        </activity>
+
+        <activity android:name=".RSmap">
+        </activity>
+
+        <activity android:name=".ResistRS"
+            android:parentActivityName=".RSmap">
         </activity>
 
         <activity android:name=".ResistMenu"

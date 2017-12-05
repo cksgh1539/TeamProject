@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">한성맛집앱</string>
+    <string name="app_name">Food Fighter</string>
     <string name ="restaurantName1">학생식당 </string>
     <string name ="restaurantAddress1">성북구 </string>
     <string name ="Phone">02-760-1678 </string>
@@ -13,4 +13,5 @@
     <string name="price">가격</string>
     <string name="detail">설명</string>
     <string name="resistMENU">메뉴등록</string>
+    <string name="no_location_detected">No Location Detected</string>
 </resources>
