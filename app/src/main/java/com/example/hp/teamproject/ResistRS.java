@@ -99,9 +99,6 @@ public class ResistRS extends AppCompatActivity{
                 try {
                     File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
                     mPhotoFile = new File(path, mPhotoFileName);
-
-                    //Bitmap bitmap = ((BitmapDrawable)mPhotoFile).getBitmap();
-                    //http://citynetc.tistory.com/150 bitmap으로 db에 이미지 저장
                     Log.i(TAG, getLocalClassName() + " :savePicture");
                     imageView.setImageURI(RSUri); //imageView에 찍은 사진 표시
                 }catch (Exception e) {
@@ -130,17 +127,16 @@ public class ResistRS extends AppCompatActivity{
                 ( "file:///storage/emulated/0/Pictures/"+mPhotoFileName,RSname.getText().toString(),RSnum.getText().toString(), RSadrress.getText().toString());
         Log.i(TAG, getLocalClassName() + " :insert" + nOfRows);
 
-      //  Uri RSUri2 = Uri.parse("file:///storage/emulated/0/Pictures/"+mPhotoFileName);
 
         if(nOfRows > 0) {
             Toast.makeText(this, "맛집 등록중...", Toast.LENGTH_SHORT).show();
 
             Intent TestRS = new Intent(getApplicationContext(), MainRestaurant.class);
-           // RestaurantDetail.setData(RSUri2); //Intent로 찍은 사진의 uri값을 넘겨줌
-
             startActivity(TestRS);
+
         }else Toast.makeText(this,"[Error] Try again",Toast.LENGTH_SHORT).show();
     }
+
 
     //permission확인 메소드-------------------------------------------------------------------------
     final int  REQUEST_EXTERNAL_STORAGE_FOR_MULTIMEDIA=1;

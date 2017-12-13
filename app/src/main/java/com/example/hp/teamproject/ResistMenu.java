@@ -27,6 +27,7 @@ public class ResistMenu extends AppCompatActivity {
     EditText MENUname;
     EditText MENUprice;
     EditText MENUcomment;
+    String id;
     String mPhotoFileName = null;
     File mPhotoFile = null;
     private RSdbHelper mDbHelper;
@@ -41,6 +42,9 @@ public class ResistMenu extends AppCompatActivity {
 
         checkDangerousPermissions();//permission획득 체크
         mDbHelper = new RSdbHelper(this);
+
+        Intent intent = getIntent(); //메뉴를 등록할 식당의 id값 받아오기
+        id = intent.getStringExtra("RS_ID");
 
         ImageView RSimage = (ImageView)findViewById(R.id.MENU_Image);
         RSimage.setOnClickListener(new View.OnClickListener() {
@@ -120,7 +124,7 @@ public class ResistMenu extends AppCompatActivity {
 
         long nOfRows = mDbHelper.insertMENUByMethod
                 ("file:///storage/emulated/0/Pictures/"+mPhotoFileName,
-                        MENUname.getText().toString(),MENUprice.getText().toString(), MENUcomment.getText().toString());
+                        MENUname.getText().toString(),MENUprice.getText().toString(), MENUcomment.getText().toString(),id);
 
         Log.i(TAG, getLocalClassName() + " :insert" +MENUname.getText().toString()+ MENUprice.getText().toString()+MENUcomment.getText().toString());
 

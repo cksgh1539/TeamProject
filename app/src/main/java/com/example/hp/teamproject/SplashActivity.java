@@ -53,7 +53,7 @@ public class SplashActivity extends AppCompatActivity {
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.setInterpolator(new AccelerateInterpolator());
         animatorSet.play(alphaAnimator);
-        animatorSet.setDuration(2000);
+        animatorSet.setDuration(3000);
         animatorSet.start();
     }
 

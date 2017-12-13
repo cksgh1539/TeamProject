@@ -30,6 +30,8 @@ public class MainRSfragment extends Fragment {
     TextView NUMBER,PRICE;
     TextView ADRRESS;
     ImageView RSIMAGE,MENUIMAGE,ImagePhone;
+    Cursor RS;
+    String RS_id;
 
     private RSdbHelper rsDbHelper;
 
@@ -75,15 +77,15 @@ public class MainRSfragment extends Fragment {
 //맛집 정보 출력
    private void viewRSToListView() {
 
-        Cursor RS = rsDbHelper.getRSByMethod();
-        RS.moveToLast();
+        RS = rsDbHelper.getRSByMethod();
 
-        String RSImg = RS.getString(1);
-        Uri RSUri = Uri.parse(RSImg);
-        RSIMAGE.setImageURI(RSUri);
-
-       // Cursor cursor = rsDbHelper.getRSByMethod();
         if (RS.moveToLast()) {
+            RS_id = RS.getString(0);
+
+            String RSImg = RS.getString(1);
+            Uri RSUri = Uri.parse(RSImg);
+            RSIMAGE.setImageURI(RSUri);
+
             rsNAME.setText(RS.getString(2));
             NUMBER.setText(RS.getString(3));
             ADRRESS.setText(RS.getString(4));
@@ -136,7 +138,10 @@ public class MainRSfragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.quick_add:
-                startActivity(new Intent(getActivity(), ResistMenu.class));
+                Intent intent = new Intent(getActivity(),ResistMenu.class);
+                //Intent.putExtra("RS_ID",RS_id);
+                startActivity(intent);
+
                 break;
 
         }

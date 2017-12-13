@@ -12,9 +12,10 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_gravity="top"
+        android:layout_marginTop="60dp"
+        android:contentDescription="TODO"
         android:padding="8dp"
-        android:scaleType="centerInside"
-        android:contentDescription="TODO" />
+        android:scaleType="centerInside" />
 
     <TextView
         android:id="@+id/Name"
