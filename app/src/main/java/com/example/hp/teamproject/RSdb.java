@@ -18,6 +18,9 @@ public final class RSdb {
         public static final String KEY_name = "RSname";
         public static final String KEY_num = "RSnum";
         public static final String KEY_adrress = "RSadrress";
+        public static final String KEY_latitude = "RSlatitude";
+        public static final String KEY_longitde = "RSlongitude";
+
 
 
         public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
@@ -25,7 +28,9 @@ public final class RSdb {
                 KEY_ImageRS+TEXT_TYPE+COMMA_SEP +
                 KEY_name + TEXT_TYPE + COMMA_SEP +
                 KEY_num + TEXT_TYPE + COMMA_SEP +
-                KEY_adrress + TEXT_TYPE +  " )";
+                KEY_adrress + TEXT_TYPE +COMMA_SEP +
+                KEY_latitude + TEXT_TYPE +COMMA_SEP +
+                KEY_longitde + TEXT_TYPE +" )";
 
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
@@ -43,7 +48,7 @@ public final class RSdb {
                 KEY_ImageMenu + TEXT_TYPE + COMMA_SEP +
                 KEY_menu + TEXT_TYPE + COMMA_SEP +
                 KEY_price + TEXT_TYPE + COMMA_SEP +
-                KEY_comment + TEXT_TYPE +
+                KEY_comment + TEXT_TYPE + COMMA_SEP +
                 KEY_ID + TEXT_TYPE +" )";
 
         public static final String DELETE_TABLE2 = "DROP TABLE IF EXISTS " + TABLE_NAME2;

@@ -31,13 +31,15 @@ public class RSdbHelper extends SQLiteOpenHelper {
     }
 
     //맛집 정보 db에 저장---------------------------------------------------------------------------
-    public long insertRSByMethod(String ImageRS,String name, String num, String adrress) {
+    public long insertRSByMethod(String ImageRS,String name, String num, String adrress, String latitude, String longitude) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(RSdb.Restaurant.KEY_ImageRS,ImageRS);
         values.put(RSdb.Restaurant.KEY_name, name);
         values.put(RSdb.Restaurant.KEY_num, num);
         values.put(RSdb.Restaurant.KEY_adrress, adrress);
+        values.put(RSdb.Restaurant.KEY_latitude, latitude);
+        values.put(RSdb.Restaurant.KEY_longitde, longitude);
 
         return db.insert(RSdb.Restaurant.TABLE_NAME, null, values);
     }
@@ -57,9 +59,19 @@ public class RSdbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getReadableDatabase();
         return db.query(RSdb.Restaurant.TABLE_NAME,null,null,null,null,null,null);
     }
+
     public Cursor getMenuByMethod() {
         SQLiteDatabase db = getReadableDatabase();
         return db.query(RSdb.Menu.TABLE_NAME2,null,null,null,null,null,null);
+    }
+
+    public Cursor getMenuByID(String id) {
+        SQLiteDatabase db = getReadableDatabase();
+        String sql = "Select * FROM " + RSdb.Menu.TABLE_NAME2
+                + " Where " + RSdb.Menu.KEY_ID + " = '" + id + "'";
+        //받아온 id 값과 일치하는 레코드 select
+        return db.rawQuery(sql, null);
+
     }
 
 }

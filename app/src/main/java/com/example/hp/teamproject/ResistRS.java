@@ -30,6 +30,7 @@ public class ResistRS extends AppCompatActivity{
     EditText RSadrress;
     String mPhotoFileName = null;
     File mPhotoFile = null;
+    String latitude, longitude;
 
     String TAG = "RestRS";
 
@@ -42,6 +43,10 @@ public class ResistRS extends AppCompatActivity{
 
         checkDangerousPermissions();//permission획득 체크
         mDbHelper = new RSdbHelper(this);
+
+        Intent intent = getIntent();
+        latitude = intent.getStringExtra("RSlatitude");
+        longitude = intent.getStringExtra("RSlongitude");
 
         ImageView RSimage = (ImageView)findViewById(R.id.RS_Image);
         RSimage.setOnClickListener(new View.OnClickListener() {
@@ -124,7 +129,8 @@ public class ResistRS extends AppCompatActivity{
         RSadrress = (EditText)findViewById(R.id.RSadrress); // 맛집 주소 입력
 
         long nOfRows = mDbHelper.insertRSByMethod
-                ( "file:///storage/emulated/0/Pictures/"+mPhotoFileName,RSname.getText().toString(),RSnum.getText().toString(), RSadrress.getText().toString());
+                ("file:///storage/emulated/0/Pictures/"+mPhotoFileName,RSname.getText().toString(),
+                        RSnum.getText().toString(), RSadrress.getText().toString(),latitude, longitude);
         Log.i(TAG, getLocalClassName() + " :insert" + nOfRows);
 
 

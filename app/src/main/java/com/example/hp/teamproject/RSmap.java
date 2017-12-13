@@ -89,7 +89,6 @@ public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
         );
     }
 
-
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -192,15 +191,7 @@ public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
 
-        LatLng hansung = new LatLng(37.5817891, 127.009854);
-        googleMap.addMarker(
-                new MarkerOptions().
-                        position(hansung).
-                        title("한성대학교"));
-
-        // move the camera
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hansung,15));
-
+        updateUI();
         mGoogleMap.setOnMarkerClickListener(new MyMarkerClickListener());
     }
 
@@ -269,6 +260,8 @@ public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         Intent intent = new Intent(getApplicationContext(), ResistRS.class);
+                        intent.putExtra("RSlatitude",mLastLocation.getLatitude());
+                        intent.putExtra("RSlongitude",mLastLocation.getLongitude());
                         startActivity(intent);
                     }
                 });
