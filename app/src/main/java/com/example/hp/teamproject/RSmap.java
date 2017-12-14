@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -30,6 +31,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -47,6 +49,7 @@ import java.util.Locale;
 public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
     private FusedLocationProviderClient mFusedLocationClient;
     private LocationCallback mLocationCallback;
+    private RSdbHelper rsDbHelper;
 
     final private int REQUEST_PERMISSIONS_FOR_LAST_KNOWN_LOCATION = 100;
     final private int REQUEST_PERMISSIONS_FOR_LOCATION_UPDATES = 101;
@@ -58,6 +61,8 @@ public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.rs_map);
+
+        rsDbHelper = new RSdbHelper(this);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -190,8 +195,22 @@ public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
+        getLastLocation();
 
-        updateUI();
+        Cursor RS = rsDbHelper.getRSByMethod();
+        while (RS.moveToNext()) {
+            double db_latitude= Double.parseDouble(RS.getString(5));
+            double db_longitude= Double.parseDouble(RS.getString(6));
+            Log.i("MainRS", " :RS_ID " + Double.parseDouble(RS.getString(5)) +" "+Double.parseDouble(RS.getString(6)));
+            LatLng db_location = new LatLng(db_latitude, db_longitude);
+            mGoogleMap.addMarker(
+                    new MarkerOptions().
+                            position(db_location).
+                            icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)).
+                            title(RS.getString(2))
+            );
+        }
+
         mGoogleMap.setOnMarkerClickListener(new MyMarkerClickListener());
     }
 
@@ -260,8 +279,8 @@ public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         Intent intent = new Intent(getApplicationContext(), ResistRS.class);
-                        intent.putExtra("RSlatitude",mLastLocation.getLatitude());
-                        intent.putExtra("RSlongitude",mLastLocation.getLongitude());
+                        intent.putExtra("RSlatitude",String.valueOf(mLastLocation.getLatitude()));
+                        intent.putExtra("RSlongitude",String.valueOf(mLastLocation.getLongitude()));
                         startActivity(intent);
                     }
                 });
