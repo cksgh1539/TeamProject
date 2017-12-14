@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/TeamProject.iml" filepath="$PROJECT_DIR$/TeamProject.iml" />
+      <module fileurl="file://C:\Users\hp\Downloads\TeamProject\TeamProject.iml" filepath="C:\Users\hp\Downloads\TeamProject\TeamProject.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://C:\Users\hp\Downloads\TeamProject\app\app.iml" filepath="C:\Users\hp\Downloads\TeamProject\app\app.iml" />
     </modules>
   </component>
 </project>

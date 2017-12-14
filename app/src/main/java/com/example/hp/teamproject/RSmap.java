@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -32,6 +33,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -39,6 +41,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Locale;
 
@@ -55,6 +58,7 @@ public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
     final private int REQUEST_PERMISSIONS_FOR_LOCATION_UPDATES = 101;
 
     private Location mLastLocation;
+    double distance;
     GoogleMap mGoogleMap = null;
 
     @Override
@@ -68,7 +72,7 @@ public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
         mapFragment.getMapAsync(this);
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-
+     //   getLastLocation();
         Button find = (Button) findViewById(R.id.find);
         find.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,6 +132,10 @@ public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
 
 
     public boolean onOptionsItemSelected(MenuItem item) {
+
+          RSdbHelper MapDB = new RSdbHelper(this);
+        double markLat,markLong;
+
         switch (item.getItemId()) {
             case R.id.current_location:
                 if (!checkLocationPermissions()) {
@@ -138,17 +146,60 @@ public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
                     startLocationUpdates();
                 }
                 break;
-            case R.id.one_km:
+            case R.id.one_km:  
+                mGoogleMap.clear();
+                Cursor mark = MapDB.getRSByMethod();
+                    if(mark.moveToFirst()) {
+                        while (mark.moveToNext()) {
+                            markLat = Double.valueOf(mark.getString(5)).doubleValue();
+                            markLong = Double.valueOf(mark.getString(6)).doubleValue();
+                            CalculationByDistance(markLat, markLong);
+                            if(distance<400){
+                                LatLng markLocate = new LatLng(markLat, markLong);
+                                mGoogleMap.addMarker(
+                                        new MarkerOptions().
+                                                position(markLocate).
+                                                icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)).
+                                                title(mark.getString(2))
+                                );
+                            }
+                            Toast.makeText(this, "거리 : "+distance, Toast.LENGTH_SHORT).show();
+                        }
+                    }else
+                        Toast.makeText(this, "실행안됨 : "+distance, Toast.LENGTH_SHORT).show();
 
                 break;
             case R.id.two_km:
 
+
                 break;
             case R.id.three_km:
+                mGoogleMap.addCircle(new CircleOptions()
+                        .center(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()))
+                        .radius(900)
+                        .strokeColor(Color.parseColor("#884169e1"))
+                        .fillColor(Color.parseColor("#5587cefa")));
 
                 break;
         }
         return super.onOptionsItemSelected(item);
+
+
+
+    }
+    //-------------------------------마커와의 거리-------------
+    // http://hashcode.co.kr/questions/1819 참조
+    private void CalculationByDistance(Double aLatitude,Double aLongitude) {
+        double markLat,markLong;
+       markLat = Double.valueOf(aLatitude).doubleValue();
+       markLong = Double.valueOf(aLongitude).doubleValue();
+
+        Location place = new Location(" ");
+        place.setLatitude(markLat);
+        place.setLongitude(markLong);
+
+        distance = mLastLocation.distanceTo(place);
+
     }
 
 
@@ -167,71 +218,6 @@ public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
                     Toast.makeText(getApplicationContext(), getString(R.string.no_location_detected), Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-
-    //위치 변경, 이동-------------------------------------------------------------------------
-    private void updateUI() {
-        double latitude = 0.0;
-        double longitude = 0.0;
-
-        if (mLastLocation != null) {
-            latitude = mLastLocation.getLatitude();
-            longitude = mLastLocation.getLongitude();
-        }
-        TextView mResultText = (TextView) findViewById(R.id.result);
-        mResultText.setText(String.format("[ %s , %s ]", latitude, longitude));
-
-        LatLng location = new LatLng(latitude, longitude);
-        mGoogleMap.addMarker(
-                new MarkerOptions().
-                        position(location));
-
-        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
-    }
-
-
-    //지도에 나타내기-------------------------------------------------------------------------
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mGoogleMap = googleMap;
-        getLastLocation();
-
-        Cursor RS = rsDbHelper.getRSByMethod();
-        while (RS.moveToNext()) {
-            double db_latitude= Double.parseDouble(RS.getString(5));
-            double db_longitude= Double.parseDouble(RS.getString(6));
-            Log.i("MainRS", " :RS_ID " + Double.parseDouble(RS.getString(5)) +" "+Double.parseDouble(RS.getString(6)));
-            LatLng db_location = new LatLng(db_latitude, db_longitude);
-            mGoogleMap.addMarker(
-                    new MarkerOptions().
-                            position(db_location).
-                            icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)).
-                            title(RS.getString(2))
-            );
-        }
-
-        mGoogleMap.setOnMarkerClickListener(new MyMarkerClickListener());
-    }
-
-    //위치 검색------------------------------------------------------------------------------
-    private void getAddress() {
-        try {
-            Geocoder geocoder = new Geocoder(this, Locale.KOREA);
-
-            EditText input = (EditText) findViewById(R.id.edit_text);
-            List<Address> addresses = geocoder.getFromLocationName(input.getText().toString(), 1);
-            if (addresses.size() > 0) {
-                Address bestResult = addresses.get(0);
-
-                mLastLocation.setLatitude(bestResult.getLatitude());
-                mLastLocation.setLongitude(bestResult.getLongitude());
-                updateUI();
-            }
-        } catch (IOException e) {
-            Log.e(getClass().toString(), "Failed in using Geocoder.", e);
-            return;
-        }
     }
 
     @SuppressWarnings("MissingPermission")
@@ -256,6 +242,71 @@ public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
                 null /* Looper */);
     }
 
+
+
+
+
+    //위치 검색------------------------------------------------------------------------------
+    private void getAddress() {
+        try {
+            Geocoder geocoder = new Geocoder(this, Locale.KOREA);
+
+            EditText input = (EditText) findViewById(R.id.edit_text);
+            List<Address> addresses = geocoder.getFromLocationName(input.getText().toString(), 1);
+            if (addresses.size() > 0) {
+                Address bestResult = addresses.get(0);
+
+                mLastLocation.setLatitude(bestResult.getLatitude());
+                mLastLocation.setLongitude(bestResult.getLongitude());
+                updateUI();
+            }
+        } catch (IOException e) {
+            Log.e(getClass().toString(), "Failed in using Geocoder.", e);
+            return;
+        }
+    }
+    //위치 변경, 이동-------------------------------------------------------------------------
+    private void updateUI() {
+        double latitude = 0.0;
+        double longitude = 0.0;
+
+        if (mLastLocation != null) {
+            latitude = mLastLocation.getLatitude();
+            longitude = mLastLocation.getLongitude();
+        }
+        TextView mResultText = (TextView) findViewById(R.id.result);
+        mResultText.setText(String.format("[ %s , %s ]", latitude, longitude));
+
+        LatLng location = new LatLng(latitude, longitude);
+        mGoogleMap.addMarker(
+                new MarkerOptions().
+                        position(location));
+
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
+    }
+
+    //지도에 나타내기-------------------------------------------------------------------------
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mGoogleMap = googleMap;
+        getLastLocation();
+
+        Cursor RS = rsDbHelper.getRSByMethod();
+        while (RS.moveToNext()) {
+            double db_latitude= Double.parseDouble(RS.getString(5));
+            double db_longitude= Double.parseDouble(RS.getString(6));
+            Log.i("MainRS", " :RS_ID " + Double.parseDouble(RS.getString(5)) +" "+Double.parseDouble(RS.getString(6)));
+            LatLng db_location = new LatLng(db_latitude, db_longitude);
+            mGoogleMap.addMarker(
+                    new MarkerOptions().
+                            position(db_location).
+                            icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)).
+                            title(RS.getString(2))
+            );
+        }
+
+        mGoogleMap.setOnMarkerClickListener(new MyMarkerClickListener());
+    }
 
     //마커 클릭시----------------------------------------------------------------------------
     class MyMarkerClickListener implements GoogleMap.OnMarkerClickListener {
