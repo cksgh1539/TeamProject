@@ -62,7 +62,6 @@ public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
     final private int REQUEST_PERMISSIONS_FOR_LOCATION_UPDATES = 101;
 
     private Location mLastLocation;
-   // double distance; //맛집과의 거리
     GoogleMap mGoogleMap = null;
 
     @Override
@@ -131,21 +130,8 @@ public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
         getLastLocation();
+        Log.i("MainRS", " getLastLocation");
         startLocationUpdates();
-
-        Cursor RS = rsDbHelper.getRSByMethod();
-        while (RS.moveToNext()) {
-            double db_latitude= Double.parseDouble(RS.getString(5));
-            double db_longitude= Double.parseDouble(RS.getString(6));
-            Log.i("MainRS", " :RS_ID " + Double.parseDouble(RS.getString(5)) +" "+Double.parseDouble(RS.getString(6)));
-            LatLng db_location = new LatLng(db_latitude, db_longitude);
-            mGoogleMap.addMarker(
-                    new MarkerOptions().
-                            position(db_location).
-                            icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)).
-                            title(RS.getString(2))
-            );
-        }
 
         mGoogleMap.setOnMarkerClickListener(new MyMarkerClickListener());
     }
@@ -167,9 +153,7 @@ public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
             }
         };
 
-        mFusedLocationClient.requestLocationUpdates(locRequest,
-                mLocationCallback,
-                null /* Looper */);
+        mFusedLocationClient.requestLocationUpdates(locRequest,mLocationCallback,null /* Looper */);
     }
 
 
@@ -215,11 +199,10 @@ public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
     }
 
 
-    //현재 위치로부터의 거리------------------------------------------------------------------------
+    //현재 위치로부터의 거리(반경)-------------------------------------------------------------------
     // http://hashcode.co.kr/questions/1819 참조
     private void CalculationByDistance(int Meter) {
-        RSdbHelper MapDB = new RSdbHelper(this);
-        Cursor mark = MapDB.getRSByMethod();
+        Cursor mark = rsDbHelper.getRSByMethod();
         double markLat,markLong,distance;
 
         Location place = new Location(" ");
@@ -238,7 +221,8 @@ public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
                                     icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)).
                                     title(mark.getString(2))
                     );
-                    //Toast.makeText(this, "이름:"+mark.getString(2)+"거리 :"+distance, Toast.LENGTH_SHORT).show();
+                    Log.i("MainRS", " distance from " + mark.getString(2)+" ="+distance);
+
                 }
             }
 
@@ -256,7 +240,7 @@ public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
                 if (location != null) {
                     mLastLocation = location;
                     updateUI();
-                    CalculationByDistance(500); //500m이내에 등록된 맛집 표시
+                    CalculationByDistance(500); //default: 500m이내에 등록된 맛집 표시
                 } else
                     Toast.makeText(getApplicationContext(), getString(R.string.no_location_detected), Toast.LENGTH_SHORT).show();
             }
@@ -311,12 +295,20 @@ public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
 
         @Override
         public boolean onMarkerClick(Marker marker) {
-            DialogSimple();
-            return false;
+            LatLng mlocation = new LatLng(marker.getPosition().latitude,marker.getPosition().longitude);
+
+            Cursor location = rsDbHelper.getRSbyLocation(String.valueOf(mlocation.latitude),String.valueOf(mlocation.longitude));
+            if (location.getCount() != 0) {
+                Intent TestRS = new Intent(getApplicationContext(), MainRestaurant.class);
+                startActivity(TestRS);
+            }else{
+                ResistDialog(mlocation);
+                Log.i("MainRS", " :ResistDialog");
+            }return false;
         }
     }
 
-    private void DialogSimple(){
+    private void ResistDialog(final LatLng mlocation){  //맛집 등록 다이얼로그 창
         AlertDialog.Builder alt_bld = new AlertDialog.Builder(this);
         alt_bld.setMessage("새로운 맛집으로 등록하시겠습니까?").setCancelable(
                 false).setPositiveButton("No",
@@ -328,8 +320,8 @@ public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         Intent intent = new Intent(getApplicationContext(), ResistRS.class);
-                        intent.putExtra("RSlatitude",String.valueOf(mLastLocation.getLatitude()));
-                        intent.putExtra("RSlongitude",String.valueOf(mLastLocation.getLongitude()));
+                        intent.putExtra("RSlatitude",String.valueOf(mlocation.latitude));
+                        intent.putExtra("RSlongitude",String.valueOf(mlocation.longitude));
                         startActivity(intent);
                     }
                 });

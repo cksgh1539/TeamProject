@@ -60,6 +60,15 @@ public class RSdbHelper extends SQLiteOpenHelper {
         return db.query(RSdb.Restaurant.TABLE_NAME,null,null,null,null,null,null);
     }
 
+    public Cursor getRSbyLocation(String latitude, String longitude) {
+        SQLiteDatabase db = getReadableDatabase();
+        String sql = "Select * FROM " + RSdb.Restaurant.TABLE_NAME
+                + " Where " + RSdb.Restaurant.KEY_latitude + " = '" + latitude + "'";
+        //받아온 위치 값과 일치하는 레코드 select
+        return db.rawQuery(sql, null);
+
+    }
+
     public Cursor getMenuByMethod() {
         SQLiteDatabase db = getReadableDatabase();
         return db.query(RSdb.Menu.TABLE_NAME2,null,null,null,null,null,null);

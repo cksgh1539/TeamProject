@@ -50,31 +50,33 @@ public class MainRSfragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         final View rootView = (View) inflater.inflate(R.layout.frag_main_rs, container, false);
         setHasOptionsMenu(true);
+
+        //맛집 정보 레이아웃
         RSIMAGE = (ImageView) rootView.findViewById(R.id.rsimage);
         rsNAME = (TextView) rootView.findViewById(R.id.name);
         NUMBER = (TextView) rootView.findViewById(R.id.number);
         ADRRESS = (TextView) rootView.findViewById(R.id.adrress);
         ImagePhone = (ImageView) rootView.findViewById(R.id.imagePhone);
 
+        //메뉴 정보 레이아웃
         MENUIMAGE = (ImageView) rootView.findViewById(R.id.MenuImage);
         menuName = (TextView) rootView.findViewById(R.id.MenuName);
         PRICE = (TextView) rootView.findViewById(R.id.MenuPrice);
 
         rsDbHelper = new RSdbHelper(getActivity());
-
         ImagePhone.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 calling();
             }
         });
 
-        viewRSToListView();
-        viewMENUToListView(rootView);
+        viewRSToListView();//맛집 정보 여주기
+        viewMENUToListView(rootView);// 메뉴 리스트 보여주기
 
         return rootView;
     }
 
-    //맛집 정보 출력
+    //맛집 정보 출력---------------------------------------------------------------------------------
     private void viewRSToListView() {
         RS = rsDbHelper.getRSByMethod();
 
@@ -92,7 +94,7 @@ public class MainRSfragment extends Fragment {
 
     }
 
-    //메뉴 리스트
+    //메뉴 리스트------------------------------------------------------------------------------------
     private void viewMENUToListView(View view) {
         Cursor Menu = rsDbHelper.getMenuByMethod();
         if (RS.getCount() != 0 && Menu.getCount() != 0) { //db테이블이 생성된 경우
@@ -125,7 +127,7 @@ public class MainRSfragment extends Fragment {
             return;
     }
 
-    //전화 거는 메소드
+    //전화 거는 메소드-------------------------------------------------------------------------------
     public void calling() {
         Cursor Call = rsDbHelper.getRSByMethod();
         Call.moveToLast();
@@ -135,7 +137,7 @@ public class MainRSfragment extends Fragment {
         startActivity(call);
     }
 
-    //메뉴 추가하는 메소드
+    //메뉴 추가하는 메소드----------------------------------------------------------------------------
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         super.onCreateOptionsMenu(menu, menuInflater);
         menuInflater.inflate(R.menu.resist, menu);
@@ -156,6 +158,7 @@ public class MainRSfragment extends Fragment {
     }
 
 
+    //메뉴 클릭시 상세보기 이동-----------------------------------------------------------------------
     public void onViewStateRestored(Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
         if (savedInstanceState != null) {
