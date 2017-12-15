@@ -127,7 +127,7 @@ public class ResistMenu extends AppCompatActivity {
                 ("file:///storage/emulated/0/Pictures/"+mPhotoFileName,
                         MENUname.getText().toString(),MENUprice.getText().toString(), MENUcomment.getText().toString(),RS_id);
 
-        Log.i(TAG, getLocalClassName() + " :insert" +MENUname.getText().toString()+ MENUprice.getText().toString()+MENUcomment.getText().toString());
+        Log.i(TAG, getLocalClassName() + " :insert" +RS_id);
 
 
         if(nOfRows > 0) {

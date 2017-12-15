@@ -1,5 +1,5 @@
 package com.example.hp.teamproject;
-//db에 맛집,메뉴 정보 입출력 --------------------------------------------------------------------
+//db에 맛집,메뉴 정보 입출력 ------------------------------------------------------------------------
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -63,7 +63,8 @@ public class RSdbHelper extends SQLiteOpenHelper {
     public Cursor getRSbyLocation(String latitude, String longitude) {
         SQLiteDatabase db = getReadableDatabase();
         String sql = "Select * FROM " + RSdb.Restaurant.TABLE_NAME
-                + " Where " + RSdb.Restaurant.KEY_latitude + " = '" + latitude + "'";
+                + " Where " + RSdb.Restaurant.KEY_latitude + " = '" + latitude + "'"
+                +" AND " + RSdb.Restaurant.KEY_longitde + " = '" + longitude + "'";
         //받아온 위치 값과 일치하는 레코드 select
         return db.rawQuery(sql, null);
 

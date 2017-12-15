@@ -32,6 +32,7 @@ public class MainRSfragment extends Fragment {
     ImageView RSIMAGE, MENUIMAGE, ImagePhone;
     Cursor RS;
     int RS_id;
+    String latitude ,longitude;
 
     private RSdbHelper rsDbHelper;
 
@@ -41,9 +42,7 @@ public class MainRSfragment extends Fragment {
         public void onTitleSelected(int i);
     }
 
-    public MainRSfragment() {
-        // Required empty public constructor
-    }
+    public MainRSfragment() {    }
 
     @Nullable
     @Override
@@ -78,20 +77,38 @@ public class MainRSfragment extends Fragment {
 
     //맛집 정보 출력---------------------------------------------------------------------------------
     private void viewRSToListView() {
-        RS = rsDbHelper.getRSByMethod();
+        latitude = getActivity().getIntent().getStringExtra("markerlatitude");
+        longitude = getActivity().getIntent().getStringExtra("markerlongitude");
+        RS = rsDbHelper.getRSbyLocation(latitude,longitude);
+        Cursor location = rsDbHelper.getRSbyLocation(latitude,longitude);
+        //클릭된 마커위치 받아와서 db에 저장된 식당 위치와 비교
 
-        RS.moveToLast();
-        RS_id = RS.getInt(0);
-        Log.i("MainRS", " :RS_ID " + RS_id);
+        if (location.getCount() != 0) { //등록된 맛집이 있는 경우
+            location.moveToLast();
+            RS_id = location.getInt(0);
+            Log.i("MainRS", " :RS_ID " + RS_id);
 
-        String RSImg = RS.getString(1);
-        Uri RSUri = Uri.parse(RSImg);
-        RSIMAGE.setImageURI(RSUri);
+            String RSImg = location.getString(1);
+            Uri RSUri = Uri.parse(RSImg);
+            RSIMAGE.setImageURI(RSUri);
 
-        rsNAME.setText(RS.getString(2));
-        NUMBER.setText(RS.getString(3));
-        ADRRESS.setText(RS.getString(4));
+            rsNAME.setText(location.getString(2));
+            NUMBER.setText(location.getString(3));
+            ADRRESS.setText(location.getString(4));
+        }else { //처음 등록하는 맛집인 경우
+            RS = rsDbHelper.getRSByMethod();
+            RS.moveToLast();
+            RS_id = RS.getInt(0);
+            Log.i("MainRS", " :RS_ID " + RS_id);
 
+            String RSImg = RS.getString(1);
+            Uri RSUri = Uri.parse(RSImg);
+            RSIMAGE.setImageURI(RSUri);
+
+            rsNAME.setText(RS.getString(2));
+            NUMBER.setText(RS.getString(3));
+            ADRRESS.setText(RS.getString(4));
+        }
     }
 
     //메뉴 리스트------------------------------------------------------------------------------------

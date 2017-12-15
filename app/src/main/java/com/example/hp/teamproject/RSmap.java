@@ -296,12 +296,17 @@ public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
         @Override
         public boolean onMarkerClick(Marker marker) {
             LatLng mlocation = new LatLng(marker.getPosition().latitude,marker.getPosition().longitude);
+            //클릭한 마커 위치값
 
             Cursor location = rsDbHelper.getRSbyLocation(String.valueOf(mlocation.latitude),String.valueOf(mlocation.longitude));
-            if (location.getCount() != 0) {
-                Intent TestRS = new Intent(getApplicationContext(), MainRestaurant.class);
-                startActivity(TestRS);
-            }else{
+            //마커위치와 db에 저장된 식당 위치 비교
+            if (location.getCount() != 0) { //같은 위치인 맛집이 있을 경우
+                location.moveToNext();
+                Intent detailRS = new Intent(getApplicationContext(), MainRestaurant.class);
+                detailRS.putExtra("markerlatitude",location.getString(5));
+                detailRS.putExtra("markerlongitude",location.getString(6));
+                startActivity(detailRS);
+            }else{//새로 등록하는 맛집인 경우
                 ResistDialog(mlocation);
                 Log.i("MainRS", " :ResistDialog");
             }return false;
@@ -319,10 +324,10 @@ public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
                 }).setNegativeButton("Yes",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Intent intent = new Intent(getApplicationContext(), ResistRS.class);
-                        intent.putExtra("RSlatitude",String.valueOf(mlocation.latitude));
-                        intent.putExtra("RSlongitude",String.valueOf(mlocation.longitude));
-                        startActivity(intent);
+                        Intent resistRS = new Intent(getApplicationContext(), ResistRS.class);
+                        resistRS.putExtra("RSlatitude",String.valueOf(mlocation.latitude));
+                        resistRS.putExtra("RSlongitude",String.valueOf(mlocation.longitude));
+                        startActivity(resistRS);
                     }
                 });
         AlertDialog alert = alt_bld.create();

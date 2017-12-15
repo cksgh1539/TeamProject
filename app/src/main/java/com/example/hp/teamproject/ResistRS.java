@@ -19,6 +19,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import junit.framework.Test;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
