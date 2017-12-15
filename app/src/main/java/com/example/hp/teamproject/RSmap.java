@@ -3,6 +3,7 @@ package com.example.hp.teamproject;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -54,6 +55,9 @@ public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
     private LocationCallback mLocationCallback;
     private RSdbHelper rsDbHelper;
 
+    SharedPreferences setting;
+    public static final String OptionMenu = "kilometer";
+
     final private int REQUEST_PERMISSIONS_FOR_LAST_KNOWN_LOCATION = 100;
     final private int REQUEST_PERMISSIONS_FOR_LOCATION_UPDATES = 101;
 
@@ -83,7 +87,7 @@ public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
     }
 
 
-    //권한 체크----------------------------------------------------------------------
+    //권한 체크------------------------------------------------------------------------------------
     private boolean checkLocationPermissions() {
         int permissionState = ActivityCompat.checkSelfPermission(getApplicationContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION);
@@ -122,16 +126,42 @@ public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
     }
 
 
-    //옵션메뉴에서 현재 위치 받아오기--------------------------------------------------
+    //지도에 나타내기------------------------------------------------------------------------------
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mGoogleMap = googleMap;
+        getLastLocation();
+
+        Cursor RS = rsDbHelper.getRSByMethod();
+        while (RS.moveToNext()) {
+            double db_latitude= Double.parseDouble(RS.getString(5));
+            double db_longitude= Double.parseDouble(RS.getString(6));
+            Log.i("MainRS", " :RS_ID " + Double.parseDouble(RS.getString(5)) +" "+Double.parseDouble(RS.getString(6)));
+            LatLng db_location = new LatLng(db_latitude, db_longitude);
+            mGoogleMap.addMarker(
+                    new MarkerOptions().
+                            position(db_location).
+                            icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)).
+                            title(RS.getString(2))
+            );
+        }
+
+        mGoogleMap.setOnMarkerClickListener(new MyMarkerClickListener());
+    }
+
+
+    //옵션메뉴에서 현재 위치 받아오기----------------------------------------------------------------
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.current_location, menu);
+
         return super.onCreateOptionsMenu(menu);
     }
 
-
     public boolean onOptionsItemSelected(MenuItem item) {
+        setting = getSharedPreferences(OptionMenu,MODE_PRIVATE);
+        SharedPreferences.Editor editor = setting.edit();
 
         switch (item.getItemId()) {
             case R.id.current_location:
@@ -140,22 +170,29 @@ public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
                     requestLocationPermissions(REQUEST_PERMISSIONS_FOR_LOCATION_UPDATES);
                 } else {
                     getLastLocation();
-                   // startLocationUpdates();
                 }
                 break;
             case R.id.one_km:
-                CalculationByDistance(1000);
+                item.setChecked(true);
+                editor.putBoolean("ONE",true).commit();
+                CalculationByDistance(1000); //1km이내에 등록된 맛집 표시
                 break;
             case R.id.two_km:
+                item.setChecked(true);
+                editor.putBoolean("TWO",true).commit();
                 CalculationByDistance(2000);
                 break;
             case R.id.three_km:
+                item.setChecked(true);
+                editor.putBoolean("THREE",true).commit();
                 CalculationByDistance(3000);
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
-    //-------------------------------마커와의 거리-------------
+
+
+    //현재 위치로부터의 거리------------------------------------------------------------------------
     // http://hashcode.co.kr/questions/1819 참조
     private void CalculationByDistance(int Meter) {
         RSdbHelper MapDB = new RSdbHelper(this);
@@ -185,7 +222,7 @@ public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
     }
 
 
-    //현재 위치 받아오기----------------------------------------------------------------------
+    //현재 위치 받아오기----------------------------------------------------------------------------
     @SuppressWarnings("MissingPermission")
     private void getLastLocation() {
         Task task = mFusedLocationClient.getLastLocation();
@@ -203,7 +240,7 @@ public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
     }
 
     
-    //위치 검색------------------------------------------------------------------------------
+    //위치 검색------------------------------------------------------------------------------------
     private void getAddress() {
         try {
             Geocoder geocoder = new Geocoder(this, Locale.KOREA);
@@ -222,7 +259,9 @@ public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
             return;
         }
     }
-    //위치 변경, 이동-------------------------------------------------------------------------
+
+
+    //위치 변경, 이동-----------------------------------------------------------------------------
     private void updateUI() {
         double latitude = 0.0;
         double longitude = 0.0;
@@ -242,30 +281,8 @@ public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
     }
 
-    //지도에 나타내기-------------------------------------------------------------------------
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mGoogleMap = googleMap;
-        getLastLocation();
 
-        Cursor RS = rsDbHelper.getRSByMethod();
-        while (RS.moveToNext()) {
-            double db_latitude= Double.parseDouble(RS.getString(5));
-            double db_longitude= Double.parseDouble(RS.getString(6));
-            Log.i("MainRS", " :RS_ID " + Double.parseDouble(RS.getString(5)) +" "+Double.parseDouble(RS.getString(6)));
-            LatLng db_location = new LatLng(db_latitude, db_longitude);
-            mGoogleMap.addMarker(
-                    new MarkerOptions().
-                            position(db_location).
-                            icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)).
-                            title(RS.getString(2))
-            );
-        }
-
-        mGoogleMap.setOnMarkerClickListener(new MyMarkerClickListener());
-    }
-
-    //마커 클릭시----------------------------------------------------------------------------
+    //마커 클릭시--------------------------------------------------------------------------------
     class MyMarkerClickListener implements GoogleMap.OnMarkerClickListener {
 
         @Override
