@@ -58,7 +58,7 @@ public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
     final private int REQUEST_PERMISSIONS_FOR_LOCATION_UPDATES = 101;
 
     private Location mLastLocation;
-    double distance;
+   // double distance; //맛집과의 거리
     GoogleMap mGoogleMap = null;
 
     @Override
@@ -111,13 +111,13 @@ public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
                 }
                 break;
             }
-            case REQUEST_PERMISSIONS_FOR_LOCATION_UPDATES: {
+           /* case REQUEST_PERMISSIONS_FOR_LOCATION_UPDATES: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     startLocationUpdates();
                 } else {
                     Toast.makeText(this, "Permission required", Toast.LENGTH_SHORT);
                 }
-            }
+            }*/
         }
     }
 
@@ -133,9 +133,6 @@ public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
 
     public boolean onOptionsItemSelected(MenuItem item) {
 
-          RSdbHelper MapDB = new RSdbHelper(this);
-        double markLat,markLong;
-
         switch (item.getItemId()) {
             case R.id.current_location:
                 if (!checkLocationPermissions()) {
@@ -143,62 +140,47 @@ public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
                     requestLocationPermissions(REQUEST_PERMISSIONS_FOR_LOCATION_UPDATES);
                 } else {
                     getLastLocation();
-                    startLocationUpdates();
+                   // startLocationUpdates();
                 }
                 break;
-            case R.id.one_km:  
-                mGoogleMap.clear();
-                Cursor mark = MapDB.getRSByMethod();
-                    if(mark.moveToFirst()) {
-                        while (mark.moveToNext()) {
-                            markLat = Double.valueOf(mark.getString(5)).doubleValue();
-                            markLong = Double.valueOf(mark.getString(6)).doubleValue();
-                            CalculationByDistance(markLat, markLong);
-                            if(distance<400){
-                                LatLng markLocate = new LatLng(markLat, markLong);
-                                mGoogleMap.addMarker(
-                                        new MarkerOptions().
-                                                position(markLocate).
-                                                icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)).
-                                                title(mark.getString(2))
-                                );
-                            }
-                            Toast.makeText(this, "거리 : "+distance, Toast.LENGTH_SHORT).show();
-                        }
-                    }else
-                        Toast.makeText(this, "실행안됨 : "+distance, Toast.LENGTH_SHORT).show();
-
+            case R.id.one_km:
+                CalculationByDistance(1000);
                 break;
             case R.id.two_km:
-
-
+                CalculationByDistance(2000);
                 break;
             case R.id.three_km:
-                mGoogleMap.addCircle(new CircleOptions()
-                        .center(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()))
-                        .radius(900)
-                        .strokeColor(Color.parseColor("#884169e1"))
-                        .fillColor(Color.parseColor("#5587cefa")));
-
+                CalculationByDistance(3000);
                 break;
         }
         return super.onOptionsItemSelected(item);
-
-
-
     }
     //-------------------------------마커와의 거리-------------
     // http://hashcode.co.kr/questions/1819 참조
-    private void CalculationByDistance(Double aLatitude,Double aLongitude) {
-        double markLat,markLong;
-       markLat = Double.valueOf(aLatitude).doubleValue();
-       markLong = Double.valueOf(aLongitude).doubleValue();
+    private void CalculationByDistance(int Meter) {
+        RSdbHelper MapDB = new RSdbHelper(this);
+        Cursor mark = MapDB.getRSByMethod();
+        double markLat,markLong,distance;
 
         Location place = new Location(" ");
-        place.setLatitude(markLat);
-        place.setLongitude(markLong);
-
-        distance = mLastLocation.distanceTo(place);
+            mGoogleMap.clear();
+            while (mark.moveToNext()) {
+                markLat = Double.valueOf(mark.getString(5)).doubleValue();
+                markLong = Double.valueOf(mark.getString(6)).doubleValue();
+                place.setLatitude(markLat);
+                place.setLongitude(markLong);
+                distance = mLastLocation.distanceTo(place);
+                if(distance<Meter){
+                    LatLng markLocate = new LatLng(markLat, markLong);
+                    mGoogleMap.addMarker(
+                            new MarkerOptions().
+                                    position(markLocate).
+                                    icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)).
+                                    title(mark.getString(2))
+                    );
+                    Toast.makeText(this, "이름:"+mark.getString(2)+"거리 :"+distance, Toast.LENGTH_SHORT).show();
+                }
+            }
 
     }
 
@@ -220,32 +202,7 @@ public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
         });
     }
 
-    @SuppressWarnings("MissingPermission")
-    private void startLocationUpdates() {
-        LocationRequest locRequest = new LocationRequest();
-        locRequest.setInterval(10000);
-        locRequest.setFastestInterval(5000);
-        locRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-
-        mLocationCallback = new LocationCallback() {
-            @Override
-            public void onLocationResult(LocationResult locationResult) {
-                super.onLocationResult(locationResult);
-
-                mLastLocation = locationResult.getLastLocation();
-                updateUI();
-            }
-        };
-
-        mFusedLocationClient.requestLocationUpdates(locRequest,
-                mLocationCallback,
-                null /* Looper */);
-    }
-
-
-
-
-
+    
     //위치 검색------------------------------------------------------------------------------
     private void getAddress() {
         try {

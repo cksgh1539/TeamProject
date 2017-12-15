@@ -129,7 +129,7 @@ public class ResistRS extends AppCompatActivity{
         RSadrress = (EditText)findViewById(R.id.RSadrress); // 맛집 주소 입력
 
         long nOfRows = mDbHelper.insertRSByMethod
-                ("file:///storage/emulated/0/Pictures/"+mPhotoFileName,RSname.getText().toString(),
+                ("file:///storage/emulated/0/Pictures/"+mPhotoFileName, RSname.getText().toString(),
                         RSnum.getText().toString(), RSadrress.getText().toString(),latitude, longitude);
         Log.i(TAG, getLocalClassName() + " :insert" + nOfRows);
 

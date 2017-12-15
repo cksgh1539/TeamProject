@@ -6,7 +6,7 @@ import android.provider.BaseColumns;
 import java.net.URI;
 
 public final class RSdb {
-    public static final String DB_NAME="restaurant1.db";
+    public static final String DB_NAME="Test3.db";
     public static final int DATABASE_VERSION = 1;
     private static final String TEXT_TYPE = " TEXT";
     private static final String COMMA_SEP = ",";
