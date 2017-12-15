@@ -115,13 +115,13 @@ public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
                 }
                 break;
             }
-           /* case REQUEST_PERMISSIONS_FOR_LOCATION_UPDATES: {
+            case REQUEST_PERMISSIONS_FOR_LOCATION_UPDATES: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     startLocationUpdates();
                 } else {
                     Toast.makeText(this, "Permission required", Toast.LENGTH_SHORT);
                 }
-            }*/
+            }
         }
     }
 
@@ -131,6 +131,7 @@ public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
         getLastLocation();
+        startLocationUpdates();
 
         Cursor RS = rsDbHelper.getRSByMethod();
         while (RS.moveToNext()) {
@@ -147,6 +148,28 @@ public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
         }
 
         mGoogleMap.setOnMarkerClickListener(new MyMarkerClickListener());
+    }
+
+    @SuppressWarnings("MissingPermission")
+    private void startLocationUpdates() {
+        LocationRequest locRequest = new LocationRequest();
+        locRequest.setInterval(100000);
+        locRequest.setFastestInterval(50000);
+        locRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        mLocationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                super.onLocationResult(locationResult);
+
+                mLastLocation = locationResult.getLastLocation();
+                updateUI();
+            }
+        };
+
+        mFusedLocationClient.requestLocationUpdates(locRequest,
+                mLocationCallback,
+                null /* Looper */);
     }
 
 
@@ -202,8 +225,8 @@ public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
         Location place = new Location(" ");
             mGoogleMap.clear();
             while (mark.moveToNext()) {
-                markLat = Double.valueOf(mark.getString(5)).doubleValue();
-                markLong = Double.valueOf(mark.getString(6)).doubleValue();
+                markLat = Double.valueOf(mark.getString(5)).doubleValue(); //db에 저장된 위도값
+                markLong = Double.valueOf(mark.getString(6)).doubleValue(); //db에 저장된 경도값
                 place.setLatitude(markLat);
                 place.setLongitude(markLong);
                 distance = mLastLocation.distanceTo(place);
@@ -215,7 +238,7 @@ public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
                                     icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)).
                                     title(mark.getString(2))
                     );
-                    Toast.makeText(this, "이름:"+mark.getString(2)+"거리 :"+distance, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(this, "이름:"+mark.getString(2)+"거리 :"+distance, Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -233,6 +256,7 @@ public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
                 if (location != null) {
                     mLastLocation = location;
                     updateUI();
+                    CalculationByDistance(500); //500m이내에 등록된 맛집 표시
                 } else
                     Toast.makeText(getApplicationContext(), getString(R.string.no_location_detected), Toast.LENGTH_SHORT).show();
             }

@@ -10,8 +10,7 @@
     <group android:checkableBehavior="single">
         <item android:id="@+id/one_km"
             android:title="1km"
-            android:orderInCategory="1"
-            android:checked="true"/>
+            android:orderInCategory="1"/>
 
         <item android:id="@+id/two_km"
             android:title="2km"
