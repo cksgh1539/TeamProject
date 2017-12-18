@@ -2,13 +2,6 @@
 <set xmlns:android="http://schemas.android.com/apk/res/android"
     android:shareInterpolator="true">
 
-    <rotate
-        android:duration="2000"
-        android:fromDegrees="0"
-        android:toDegrees="1800"
-        android:pivotX="50%"
-        android:pivotY="50%"/>
-
     <alpha
         android:fromAlpha="0.2"
         android:toAlpha="1"

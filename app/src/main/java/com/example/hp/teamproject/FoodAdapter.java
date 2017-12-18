@@ -25,7 +25,7 @@ public class FoodAdapter extends BaseAdapter{
     }
 
     @Override
-    public View getView(int j, View view, ViewGroup viewGroup) { //i번째 항목에 대한 view를 만듦
+    public View getView(int j, View view, ViewGroup viewGroup) { //j번째 항목에 대한 view를 만듦
 
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) fContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

@@ -17,17 +17,18 @@ public class MainRestaurant extends AppCompatActivity implements MainRSfragment.
         setContentView(R.layout.main_rs);
     }
 
-    public void onTitleSelected(int i) {
+    public void onTitleSelected(int i,String RS_id) {
         if (getResources().getConfiguration().orientation
                 == Configuration.ORIENTATION_LANDSCAPE) {
             FoodDetailFrag details = new FoodDetailFrag();
-            details.setSelection(i);
+            details.setSelection(i,RS_id);
             getSupportFragmentManager().beginTransaction().replace(R.id.details, details).commit();
 
 
         } else {
             Intent intent = new Intent(this, FoodDetail.class);
             intent.putExtra("index", i);
+            intent.putExtra("RSid", RS_id);
             startActivity(intent);
 
         }

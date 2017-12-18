@@ -5,7 +5,6 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.CALL_PHONE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -23,10 +22,6 @@
 
         <activity android:name=".SplashActivity"
             android:screenOrientation="portrait">
-
-        </activity>
-
-        <activity android:name=".RSmap">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -34,12 +29,14 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".RSmap">
+        </activity>
+
         <activity android:name=".ResistRS"
             android:parentActivityName=".RSmap">
         </activity>
 
-        <activity android:name=".ResistMenu"
-            android:parentActivityName=".MainRestaurant">
+        <activity android:name=".ResistMenu">
         </activity>
 
         <activity android:name=".MainRestaurant"

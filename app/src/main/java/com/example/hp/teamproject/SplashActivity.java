@@ -43,7 +43,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void startLogo2ValuePropertyAnimation() {
-        ValueAnimator alphaAnimator = ValueAnimator.ofFloat(0.1f, 1);
+        ValueAnimator alphaAnimator = ValueAnimator.ofFloat(0.2f, 1);
         alphaAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 float value = (float) valueAnimator.getAnimatedValue();

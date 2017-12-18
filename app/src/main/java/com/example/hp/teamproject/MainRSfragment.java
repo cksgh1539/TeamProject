@@ -18,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -32,14 +33,14 @@ public class MainRSfragment extends Fragment {
     ImageView RSIMAGE, MENUIMAGE, ImagePhone;
     Cursor RS;
     int RS_id;
-    String latitude ,longitude;
+    String TAG = "food";
 
     private RSdbHelper rsDbHelper;
 
     int mCurCheckPosition = -1;
 
     public interface OnTitleSelectedListener {
-        public void onTitleSelected(int i);
+        public void onTitleSelected(int i, String RS_id);
     }
 
     public MainRSfragment() {    }
@@ -77,38 +78,35 @@ public class MainRSfragment extends Fragment {
 
     //맛집 정보 출력---------------------------------------------------------------------------------
     private void viewRSToListView() {
-        latitude = getActivity().getIntent().getStringExtra("markerlatitude");
-        longitude = getActivity().getIntent().getStringExtra("markerlongitude");
-        RS = rsDbHelper.getRSbyLocation(latitude,longitude);
-        Cursor location = rsDbHelper.getRSbyLocation(latitude,longitude);
-        //클릭된 마커위치 받아와서 db에 저장된 식당 위치와 비교
-
-        if (location.getCount() != 0) { //등록된 맛집이 있는 경우
-            location.moveToLast();
-            RS_id = location.getInt(0);
-            Log.i("MainRS", " :RS_ID " + RS_id);
-
-            String RSImg = location.getString(1);
-            Uri RSUri = Uri.parse(RSImg);
-            RSIMAGE.setImageURI(RSUri);
-
-            rsNAME.setText(location.getString(2));
-            NUMBER.setText(location.getString(3));
-            ADRRESS.setText(location.getString(4));
-        }else { //처음 등록하는 맛집인 경우
+        int i = getActivity().getIntent().getIntExtra("INT",0);
+        if(i == 0) { //처음 등록하는 맛집일 경우
             RS = rsDbHelper.getRSByMethod();
-            RS.moveToLast();
-            RS_id = RS.getInt(0);
-            Log.i("MainRS", " :RS_ID " + RS_id);
+            insertInfo(RS);
 
-            String RSImg = RS.getString(1);
-            Uri RSUri = Uri.parse(RSImg);
-            RSIMAGE.setImageURI(RSUri);
+        }else if (i ==1) { // map에서 등록된 맛집 클릭한 경우
+            String latitude = getActivity().getIntent().getStringExtra("markerlatitude");
+            String longitude = getActivity().getIntent().getStringExtra("markerlongitude");
+            RS = rsDbHelper.getRSbyLocation(latitude, longitude);
+            insertInfo(RS);
 
-            rsNAME.setText(RS.getString(2));
-            NUMBER.setText(RS.getString(3));
-            ADRRESS.setText(RS.getString(4));
+        }else if( i ==2 ){ // 메뉴 추가하고 돌아온 맛집인 경우
+            String RS_ID = getActivity().getIntent().getStringExtra("MENU_id");
+            RS = rsDbHelper.getRSbyID(Integer.parseInt(RS_ID));
+            insertInfo(RS);
         }
+    }
+
+    private void insertInfo(Cursor RS) { //맛집 정보들 화면에 띄움
+        RS.moveToLast();
+        RS_id = RS.getInt(0);
+
+        String RSImg = RS.getString(1);
+        Uri RSUri = Uri.parse(RSImg);
+        RSIMAGE.setImageURI(RSUri);
+
+        rsNAME.setText(RS.getString(2));
+        NUMBER.setText(RS.getString(3));
+        ADRRESS.setText(RS.getString(4));
     }
 
     //메뉴 리스트------------------------------------------------------------------------------------
@@ -135,23 +133,14 @@ public class MainRSfragment extends Fragment {
                         public void onItemClick(AdapterView<?> parent, View vClicked, int position, long id) {
                             mCurCheckPosition = position;
                             Activity activity = getActivity();
-                            ((OnTitleSelectedListener) activity).onTitleSelected(position);
+                            ((OnTitleSelectedListener) activity).onTitleSelected(position,String.valueOf(RS_id));
+                            Log.i(TAG, "position= "+position +"/"+ String.valueOf(RS_id));
                         }
                     });
                     listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
                 }
         }else
             return;
-    }
-
-    //전화 거는 메소드-------------------------------------------------------------------------------
-    public void calling() {
-        Cursor Call = rsDbHelper.getRSByMethod();
-        Call.moveToLast();
-        Intent call = new Intent(Intent.ACTION_DIAL);
-        call.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        call.setData(Uri.parse("tel:" + Call.getString(3)));
-        startActivity(call);
     }
 
     //메뉴 추가하는 메소드----------------------------------------------------------------------------
@@ -164,38 +153,25 @@ public class MainRSfragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.quick_add:
-                Intent intent = new Intent(getActivity(), ResistMenu.class);
-                intent.putExtra("RS_ID", RS_id);
-                startActivity(intent);
+                Intent ResistMenu = new Intent(getActivity(), ResistMenu.class);
+                ResistMenu.putExtra("RS_ID", RS_id);
+                startActivity(ResistMenu);
+                getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 
                 break;
-
         }
         return super.onOptionsItemSelected(item);
     }
 
 
-    //메뉴 클릭시 상세보기 이동-----------------------------------------------------------------------
-    public void onViewStateRestored(Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-        if (savedInstanceState != null) {
-            mCurCheckPosition = savedInstanceState.getInt("curChoice", -1);
-            if (mCurCheckPosition >= 0) {
-                Activity activity = getActivity(); // activity associated with the current fragment
-                ((OnTitleSelectedListener) activity).onTitleSelected(mCurCheckPosition);
-
-                ListView lv = (ListView) getView().findViewById(R.id.listview);
-                lv.setSelection(mCurCheckPosition);
-                lv.smoothScrollToPosition(mCurCheckPosition);
-            }
-        }
+    //전화 거는 메소드-------------------------------------------------------------------------------
+    public void calling() {
+        Cursor Call = rsDbHelper.getRSByMethod();
+        Call.moveToLast();
+        Intent call = new Intent(Intent.ACTION_DIAL);
+        call.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        call.setData(Uri.parse("tel:" + Call.getString(3)));
+        startActivity(call);
     }
-
-    //    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt("curChoice", mCurCheckPosition);
-    }
-
 
 }

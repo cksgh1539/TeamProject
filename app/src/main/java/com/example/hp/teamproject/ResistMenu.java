@@ -45,7 +45,7 @@ public class ResistMenu extends AppCompatActivity {
 
         Intent intent = getIntent(); //메뉴를 등록할 식당의 id값 받아오기
         RS_id = String.valueOf(intent.getIntExtra("RS_ID",0)); //int타입을 String으로 변환
-        Log.i("MainRS", " :receive RS_ID " + RS_id);
+        Log.i(TAG, getLocalClassName() +" :receive RS_ID " + RS_id);
 
         ImageView RSimage = (ImageView)findViewById(R.id.MENU_Image);
         RSimage.setOnClickListener(new View.OnClickListener() {
@@ -95,7 +95,7 @@ public class ResistMenu extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode,Intent data) {
         ImageView imageView = (ImageView) findViewById(R.id.MENU_Image);
 
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE) {
             MENUUri = FileProvider.getUriForFile(this,
                     "com.example.hp.teamproject", mPhotoFile);
 
@@ -129,11 +129,14 @@ public class ResistMenu extends AppCompatActivity {
 
         Log.i(TAG, getLocalClassName() + " :insert" +RS_id);
 
-
         if(nOfRows > 0) {
             Toast.makeText(this, "메뉴 등록중...", Toast.LENGTH_SHORT).show();
+
             Intent RestaurantDetail = new Intent(getApplicationContext(), MainRestaurant.class);
+            RestaurantDetail.putExtra("MENU_id",RS_id);
+            RestaurantDetail.putExtra("INT",2);
             startActivity(RestaurantDetail);
+
         }else Toast.makeText(this,"[Error] Try again",Toast.LENGTH_SHORT).show();
     }
 
@@ -141,6 +144,7 @@ public class ResistMenu extends AppCompatActivity {
     private String currentDateFormat(){
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HH_mm_ss");
         String currentTimeStamp = dateFormat.format(new Date());
+
         return currentTimeStamp;
     }
 

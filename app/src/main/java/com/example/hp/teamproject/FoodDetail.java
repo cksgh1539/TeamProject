@@ -20,7 +20,7 @@ public class FoodDetail extends AppCompatActivity {
         }
 
         FoodDetailFrag details = new FoodDetailFrag();
-        details.setSelection(getIntent().getIntExtra("index",-1));
+        details.setSelection(getIntent().getIntExtra("index",-1),getIntent().getStringExtra("RSid"));
         getSupportFragmentManager().beginTransaction().replace(R.id.Detail, details).commit();
     }
 

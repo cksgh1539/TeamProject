@@ -5,11 +5,14 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 /**
  * Created by hp on 2017-11-21.
@@ -23,12 +26,16 @@ public class FoodDetailFrag extends Fragment {
     private RSdbHelper MenuDB;
 
     static int index=-1;
+    private String RSid;
 
     public FoodDetailFrag() {
         // Required empty public constructor
     }
 
-    public void setSelection(int i) { index = i; }
+    public void setSelection(int i,String RS_id) {
+        index = i;
+        RSid = RS_id;
+    }
 
 
     @Override
@@ -42,9 +49,11 @@ public class FoodDetailFrag extends Fragment {
         MenuPrice = (TextView) view.findViewById(R.id.Price);
         MenuComment = (TextView) view.findViewById(R.id.Comment);
 
-        Cursor cursor= MenuDB.getMenuByMethod();
+        Cursor cursor= MenuDB.getMenuByID(RSid);
         if(index >= 0)
         cursor.moveToPosition(index);
+        //cursor.moveToNext();
+        Log.i("food", " :RSid =  " + RSid+cursor.getCount());
 
         Uri Img = Uri.parse(cursor.getString(1));
         MenuImg.setImageURI(Img);

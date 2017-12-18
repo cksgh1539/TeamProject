@@ -1,9 +1,12 @@
 package com.example.hp.teamproject;
 //맛집 정보 등록 액티비티---------------------------------------------------------------------------
 
+
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -34,7 +37,7 @@ public class ResistRS extends AppCompatActivity{
     File mPhotoFile = null;
     String latitude, longitude;
 
-    String TAG = "RestRS";
+    String TAG = "camera";
 
     private RSdbHelper mDbHelper;
 
@@ -76,20 +79,21 @@ public class ResistRS extends AppCompatActivity{
             mPhotoFileName = "IMG" + currentDateFormat() + ".jpg";
             // 파일 이름 설정
 
-            File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+            File path = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
             // 외부공용디렉토리의픽쳐폴더(sdcard/Pictures)의 폴더를 path로 가져옴
 
+            Log.i(TAG,"path="+path);
             mPhotoFile = new File(path, mPhotoFileName);// path폴더에 , mPhotoFileName 이라는 파일이름으로 저장
 
             if (mPhotoFile != null) {
-            //2. 생성된 파일 객체에 대한 Uri 객체를 얻기
+                //2. 생성된 파일 객체에 대한 Uri 객체를 얻기
                 RSUri = FileProvider.getUriForFile(this,
                         "com.example.hp.teamproject", mPhotoFile);
 
-            //3. Uri 객체를 Extras를 통해 카메라 앱으로 전달
+                //3. Uri 객체를 Extras를 통해 카메라 앱으로 전달
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, RSUri);
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-                Log.i(TAG, getLocalClassName() + " :camera");
+                Log.i(TAG, getLocalClassName() + " :camera "+path+"="+mPhotoFile);
             } else
                 Toast.makeText(getApplicationContext(), "file null", Toast.LENGTH_SHORT).show();
         }
@@ -97,23 +101,16 @@ public class ResistRS extends AppCompatActivity{
 
     protected void onActivityResult(int requestCode, int resultCode,Intent data) {
         ImageView imageView = (ImageView) findViewById(R.id.RS_Image);
-
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            RSUri = FileProvider.getUriForFile(this,
-                    "com.example.hp.teamproject", mPhotoFile);
-
+        Log.i(TAG, getLocalClassName() + " :savePicture"+resultCode+RESULT_OK+REQUEST_IMAGE_CAPTURE);
+        if (requestCode == REQUEST_IMAGE_CAPTURE ) {
+            Log.i(TAG, getLocalClassName() + " :savePicture1");
             if (mPhotoFileName != null) {
-                try {
-                    File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-                    mPhotoFile = new File(path, mPhotoFileName);
-                    Log.i(TAG, getLocalClassName() + " :savePicture");
-                    imageView.setImageURI(RSUri); //imageView에 찍은 사진 표시
-                }catch (Exception e) {
-                    e.printStackTrace();
-                }
+                mPhotoFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), mPhotoFileName);
+                Log.i(TAG,"mPhotoFIlePath="+Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES));
+                Log.i(TAG, getLocalClassName() + " :savePicture2");
+                imageView.setImageURI(Uri.fromFile(mPhotoFile));
             } else
-                Toast.makeText(getApplicationContext(), "PhotoFile is null",
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "mPhotoFile is null", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -140,6 +137,7 @@ public class ResistRS extends AppCompatActivity{
             Toast.makeText(this, "맛집 등록중...", Toast.LENGTH_SHORT).show();
 
             Intent TestRS = new Intent(getApplicationContext(), MainRestaurant.class);
+            TestRS.putExtra("INT",0);
             startActivity(TestRS);
 
         }else Toast.makeText(this,"[Error] Try again",Toast.LENGTH_SHORT).show();

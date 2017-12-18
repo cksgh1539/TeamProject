@@ -55,33 +55,53 @@ public class RSdbHelper extends SQLiteOpenHelper {
         return db.insert(RSdb.Menu.TABLE_NAME2,null, values);
     }
 
+    //db에 저장된 모든 restaurant_____________________________________________________________________
     public Cursor getRSByMethod() {
         SQLiteDatabase db = getReadableDatabase();
         return db.query(RSdb.Restaurant.TABLE_NAME,null,null,null,null,null,null);
     }
 
+    //받아온 위치 값과 일치하는 restaurant select
     public Cursor getRSbyLocation(String latitude, String longitude) {
         SQLiteDatabase db = getReadableDatabase();
         String sql = "Select * FROM " + RSdb.Restaurant.TABLE_NAME
                 + " Where " + RSdb.Restaurant.KEY_latitude + " = '" + latitude + "'"
                 +" AND " + RSdb.Restaurant.KEY_longitde + " = '" + longitude + "'";
-        //받아온 위치 값과 일치하는 레코드 select
-        return db.rawQuery(sql, null);
 
+        return db.rawQuery(sql, null);
     }
 
+    //받아온 이름과 일치하는 restaurant select
+    public Cursor getRSbyName (String name) {
+        SQLiteDatabase db = getReadableDatabase();
+        String sql1 = "Select * FROM " + RSdb.Restaurant.TABLE_NAME
+                + " Where " + RSdb.Restaurant.KEY_name + " = '" + name + "'";
+
+        return db.rawQuery(sql1, null);
+    }
+
+    //받아온 아이디와 일치하는 restaurant select
+    public Cursor getRSbyID (int id) {
+        SQLiteDatabase db = getReadableDatabase();
+        String sql1 = "Select * FROM " + RSdb.Restaurant.TABLE_NAME
+                + " Where " + RSdb.Restaurant._ID + " = '" + id + "'";
+
+        return db.rawQuery(sql1, null);
+    }
+
+    //db에 저장된 모든 menu__________________________________________________________________________
     public Cursor getMenuByMethod() {
         SQLiteDatabase db = getReadableDatabase();
         return db.query(RSdb.Menu.TABLE_NAME2,null,null,null,null,null,null);
     }
 
+    //받아온 id 값과 일치하는 menu select
     public Cursor getMenuByID(String id) {
         SQLiteDatabase db = getReadableDatabase();
-        String sql = "Select * FROM " + RSdb.Menu.TABLE_NAME2
+        String sql2 = "Select * FROM " + RSdb.Menu.TABLE_NAME2
                 + " Where " + RSdb.Menu.KEY_ID + " = '" + id + "'";
-        //받아온 id 값과 일치하는 레코드 select
-        return db.rawQuery(sql, null);
 
+        return db.rawQuery(sql2, null);
     }
 
 }
