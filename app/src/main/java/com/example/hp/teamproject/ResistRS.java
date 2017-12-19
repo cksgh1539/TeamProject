@@ -77,7 +77,7 @@ public class ResistRS extends AppCompatActivity{
             }
         });
     }
-    
+
     //Restaurant사진 촬영 후 sdcard에 저장하고 불러오기---------------------------------------------
     static final int REQUEST_IMAGE_CAPTURE = 1;
     private void dispatchTakePictureIntent() {//카메라 앱 실행 요청
@@ -97,7 +97,7 @@ public class ResistRS extends AppCompatActivity{
            //mPhotoFile = new File(path, mPhotoFileName);
 
             mPhotoFile = new File(
-                    getExternalFilesDir(Environment.DIRECTORY_PICTURES),mPhotoFileName);
+                    path,mPhotoFileName);
            // mPhotoFile = new File("/storage/emulated/legacy/DCIM/Camera/", mPhotoFileName);
            // mPhotoFile = new File(path, "storage/emulated/legacy/data/DCIM/Camera" + "/"+ mPhotoFileName);// path폴더에 , mPhotoFileName 이라는 파일이름으로 저장
 
@@ -106,7 +106,8 @@ public class ResistRS extends AppCompatActivity{
                // mPhotoFile = new File(Environment.getExternalStorageDirectory( ), "storage/emulated/legacy/data/DCIM/Camera" + "/"+ mPhotoFileName);
                 //2. 생성된 파일 객체에 대한 Uri 객체를 얻기
             //    RSUri = FileProvider.getUriForFile(this,"com.example.hp.teamproject", mPhotoFile);
-                RSUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory().getPath()+"/Android/data/com.example.hp.teamproject/files/Pictures/"+mPhotoFileName));
+                RSUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory().getPath()
+                        +"/Android/data/com.example.hp.teamproject/files/Pictures/"+mPhotoFileName));
                 //"file:///storage/emulated/0/Pictures/"+mPhotoFileName
                 //3. Uri 객체를 Extras를 통해 카메라 앱으로 전달
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, RSUri);
@@ -124,14 +125,14 @@ public class ResistRS extends AppCompatActivity{
         ImageView imageView = (ImageView) findViewById(R.id.RS_Image);
         Log.i(TAG, getLocalClassName() + " :savePicture"+resultCode+RESULT_OK+REQUEST_IMAGE_CAPTURE);
 
-        rotatePhoto();
+       /* rotatePhoto();
         try {
             Bitmap image_bitmap= MediaStore.Images.Media.getBitmap(getContentResolver(), RSUri);
             imageView.setImageBitmap(image_bitmap);
 
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
 
         if (requestCode == REQUEST_IMAGE_CAPTURE ) {
             Log.i(TAG, getLocalClassName() + " :savePicture1");
@@ -149,7 +150,7 @@ public class ResistRS extends AppCompatActivity{
              //   mPhotoFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), mPhotoFileName);
                 Log.i(TAG,"mPhotoFIlePath="+mPhotoFile);
                 Log.i(TAG, getLocalClassName() + " :savePicture2");
-                imageView.setImageURI(RSUri);
+               // imageView.setImageURI(RSUri);
 
             } else {
                 Toast.makeText(getApplicationContext(), "mPhotoFile is null", Toast.LENGTH_SHORT).show();
@@ -319,7 +320,7 @@ public class ResistRS extends AppCompatActivity{
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 60, out);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
         try {
             out.close();
         } catch (IOException e) {

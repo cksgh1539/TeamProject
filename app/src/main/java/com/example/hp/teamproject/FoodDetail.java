@@ -3,6 +3,7 @@ package com.example.hp.teamproject;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 //음식의 디테일한 내용을 나타내 주는 뷰입니다.
 
@@ -20,6 +21,7 @@ public class FoodDetail extends AppCompatActivity {
         }
 
         FoodDetailFrag details = new FoodDetailFrag();
+        Log.i("food", " :RSid =  " + getIntent().getIntExtra("index",-1)+"RSid  "+getIntent().getStringExtra("RSid"));
         details.setSelection(getIntent().getIntExtra("index",-1),getIntent().getStringExtra("RSid"));
         getSupportFragmentManager().beginTransaction().replace(R.id.Detail, details).commit();
     }

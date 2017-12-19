@@ -3,6 +3,10 @@ package com.example.hp.teamproject;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -19,11 +23,16 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class ResistMenu extends AppCompatActivity {
-    Uri MENUUri;
+    static Uri MENUUri;
     EditText MENUname;
     EditText MENUprice;
     EditText MENUcomment;
@@ -73,15 +82,15 @@ public class ResistMenu extends AppCompatActivity {
             mPhotoFileName = "IMG" + currentDateFormat() + ".jpg";
             // 파일 이름 설정
 
-            File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+            File path = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
             // 외부공용디렉토리의픽쳐폴더(sdcard/Pictures)의 폴더를 path로 가져옴
 
             mPhotoFile = new File(path, mPhotoFileName);// path폴더에 , mPhotoFileName 이라는 파일이름으로 저장
 
             if (mPhotoFile != null) {
                 //2. 생성된 파일 객체에 대한 Uri 객체를 얻기
-                MENUUri = FileProvider.getUriForFile(this,
-                        "com.example.hp.teamproject", mPhotoFile);
+                MENUUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory().getPath()
+                        +"/Android/data/com.example.hp.teamproject/files/Pictures/"+mPhotoFileName));
 
                 //3. Uri 객체를 Extras를 통해 카메라 앱으로 전달
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, MENUUri);
@@ -96,21 +105,20 @@ public class ResistMenu extends AppCompatActivity {
         ImageView imageView = (ImageView) findViewById(R.id.MENU_Image);
 
         if (requestCode == REQUEST_IMAGE_CAPTURE) {
-            MENUUri = FileProvider.getUriForFile(this,
-                    "com.example.hp.teamproject", mPhotoFile);
+          //  MENUUri = FileProvider.getUriForFile(this,
+               //     "com.example.hp.teamproject", mPhotoFile);
 
             if (mPhotoFileName != null) {
+                Log.i(TAG, getLocalClassName() + " :MENU : " + MENUUri);
+                rotatePhoto();
                 try {
-                    File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-                    mPhotoFile = new File(path, mPhotoFileName);
+                    Bitmap image_bitmap= MediaStore.Images.Media.getBitmap(getContentResolver(), MENUUri);
+                    imageView.setImageBitmap(image_bitmap);
 
-                    //Bitmap bitmap = ((BitmapDrawable)mPhotoFile).getBitmap();
-                    //http://citynetc.tistory.com/150 bitmap으로 db에 이미지 저장
-                    Log.i(TAG, getLocalClassName() + " :savePicture");
-                    imageView.setImageURI(MENUUri); //imageView에 찍은 사진 표시
-                }catch (Exception e) {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
+              //  imageView.setImageURI(Me);
             } else
                 Toast.makeText(getApplicationContext(), "PhotoFile is null",
                         Toast.LENGTH_SHORT).show();
@@ -124,7 +132,7 @@ public class ResistMenu extends AppCompatActivity {
         MENUcomment = (EditText)findViewById(R.id.MENUcomment); // 맛집 주소 입력
 
         long nOfRows = mDbHelper.insertMENUByMethod
-                ("file:///storage/emulated/0/Pictures/"+mPhotoFileName,
+                ("file:///storage/emulated/0/Android/data/com.example.hp.teamproject/files/Pictures/"+mPhotoFileName,
                         MENUname.getText().toString(),MENUprice.getText().toString(), MENUcomment.getText().toString(),RS_id);
 
         Log.i(TAG, getLocalClassName() + " :insert" +RS_id);
@@ -165,6 +173,127 @@ public class ResistMenu extends AppCompatActivity {
         }
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, permissions, REQUEST_EXTERNAL_STORAGE_FOR_MULTIMEDIA);
+        }
+    }
+
+    public Bitmap getBitmap() {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inInputShareable = true;
+        options.inDither=false;
+        options.inTempStorage=new byte[64 * 1024];
+        options.inPurgeable = true;
+        options.inJustDecodeBounds = false;
+
+        File f = new File(MENUUri.getPath());
+
+        FileInputStream fs=null;
+        try {
+            fs = new FileInputStream(f);
+        } catch (FileNotFoundException e) {
+            //TODO do something intelligent
+            e.printStackTrace();
+        }
+
+        Bitmap bm = null;
+
+        try {
+            if(fs!=null) bm=BitmapFactory.decodeFileDescriptor(fs.getFD(), null, options);
+        } catch (IOException e) {
+            //TODO do something intelligent
+            e.printStackTrace();
+        } finally{
+            if(fs!=null) {
+                try {
+                    fs.close();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        }
+        return bm;
+    }
+
+
+    public void rotatePhoto() {
+        ExifInterface exif;
+        try {
+            exif = new ExifInterface(MENUUri.getPath());
+            int exifOrientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+            int exifDegree = exifOrientationToDegrees(exifOrientation);
+            if(exifDegree != 0) {
+                Bitmap bitmap = getBitmap();
+                Bitmap rotatePhoto = rotate(bitmap, exifDegree);
+                saveBitmap(rotatePhoto);
+            }
+        }
+        catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+    }
+
+    public int exifOrientationToDegrees(int exifOrientation)
+    {
+        if(exifOrientation == ExifInterface.ORIENTATION_ROTATE_90)
+        {
+            return 90;
+        }
+        else if(exifOrientation == ExifInterface.ORIENTATION_ROTATE_180)
+        {
+            return 180;
+        }
+        else if(exifOrientation == ExifInterface.ORIENTATION_ROTATE_270)
+        {
+            return 270;
+        }
+        return 0;
+    }
+
+    public static Bitmap rotate(Bitmap image, int degrees)
+    {
+        if(degrees != 0 && image != null)
+        {
+            Matrix m = new Matrix();
+            m.setRotate(degrees, (float)image.getWidth(), (float)image.getHeight());
+
+            try
+            {
+                Bitmap b = Bitmap.createBitmap(image, 0, 0, image.getWidth(), image.getHeight(), m, true);
+
+                if(image != b)
+                {
+                    image.recycle();
+                    image = b;
+                }
+
+                image = b;
+            }
+            catch(OutOfMemoryError ex)
+            {
+                ex.printStackTrace();
+            }
+        }
+        return image;
+    }
+
+
+    public void saveBitmap(Bitmap bitmap) {
+        File file = new File(MENUUri.getPath());
+        OutputStream out = null;
+        try {
+            out = new FileOutputStream(file);
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+        try {
+            out.close();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
     }
 }

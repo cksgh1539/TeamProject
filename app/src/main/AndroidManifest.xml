@@ -40,7 +40,10 @@
             android:screenOrientation="portrait">
         </activity>
 
-        <activity android:name=".ResistMenu">
+        <activity android:name=".ResistMenu"
+            android:parentActivityName=".MainRestaurant"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait">
         </activity>
 
         <activity android:name=".MainRestaurant"

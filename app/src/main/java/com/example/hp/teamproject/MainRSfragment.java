@@ -113,9 +113,11 @@ public class MainRSfragment extends Fragment {
     private void viewMENUToListView(View view) {
         Cursor Menu = rsDbHelper.getMenuByMethod();
         if (RS.getCount() != 0 && Menu.getCount() != 0) { //db테이블이 생성된 경우
+            Log.i("food", " :RSid =  " + RS_id);
 
             Cursor ID = rsDbHelper.getMenuByID(String.valueOf(RS_id)); //RS_id와 같은 id값을 가진 레코드 선택
                 if (ID.getCount() != 0) { //등록된 메뉴가 있을 경우
+                    Log.i("food", " :RSid =  " + RS_id  +"count: "+ID.getCount());
                     ArrayList<FoodItem> info = new ArrayList<>();
                     while (ID.moveToNext()) {
                         info.add(new FoodItem(ID.getString(1),
@@ -141,6 +143,22 @@ public class MainRSfragment extends Fragment {
                 }
         }else
             return;
+    }
+
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState != null) {
+            mCurCheckPosition = savedInstanceState.getInt("curChoice", -1);
+            if (mCurCheckPosition >= 0) {
+                Activity activity = getActivity(); // activity associated with the current fragment
+                ((OnTitleSelectedListener)activity).onTitleSelected(mCurCheckPosition,String.valueOf(RS_id));
+
+                ListView lv = (ListView) getView().findViewById(R.id.listview);
+                lv.setSelection(mCurCheckPosition);
+                lv.smoothScrollToPosition(mCurCheckPosition);
+            }
+        }
     }
 
     //메뉴 추가하는 메소드----------------------------------------------------------------------------

@@ -26,7 +26,7 @@ public class FoodDetailFrag extends Fragment {
     private RSdbHelper MenuDB;
 
     static int index=-1;
-    private String RSid;
+    static String RSid;
 
     public FoodDetailFrag() {
         // Required empty public constructor
