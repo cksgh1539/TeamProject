@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,46 +7,64 @@
     tools:context="com.example.hp.teamproject.FoodDetail"
     android:background="@color/backroundColor">
 
-    <ImageView
-        android:id="@+id/imageView"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_gravity="top"
-        android:layout_marginTop="60dp"
-        android:contentDescription="TODO"
-        android:padding="8dp"
-        android:scaleType="fitXY" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/Name"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:gravity="center_vertical|center_horizontal"
-        android:textSize="20sp" />
-
-    <TextView
-        android:id="@+id/Price"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:gravity="center_vertical|center_horizontal"
-        android:textSize="20sp" />
-
-    <TextView
-
-        android:id="@+id/Comment"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:gravity="center_vertical|center_horizontal"
-        android:textColor="@android:color/holo_red_light"
-        android:textSize="20sp" />
-
-</LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp">
+            <ImageView
+                android:id="@+id/review"
+                android:layout_width="63dp"
+                android:layout_height="57dp"
+                android:layout_gravity="center"
+                android:src="@drawable/review" />
+            <TextView
+                android:id="@+id/revie1"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="REVIEW"
+                android:textSize="30sp" />
+        </LinearLayout>
 
 
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="20dp"
+            android:padding="8dp"
+            android:scaleType="centerInside" />
 
+        <TextView
+            android:id="@+id/Name"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical|center_horizontal"
+            android:textSize="20sp" />
 
+        <TextView
+            android:id="@+id/Price"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical|center_horizontal"
+            android:textSize="20sp" />
 
+        <TextView
 
+            android:id="@+id/Comment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical|center_horizontal"
+            android:textColor="@android:color/holo_red_light"
+            android:textSize="20sp" />
 
-
+    </LinearLayout>
+</ScrollView>
 

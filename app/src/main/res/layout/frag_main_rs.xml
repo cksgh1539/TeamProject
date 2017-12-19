@@ -1,19 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.hp.teamproject.MainRSfragment"
-    android:background="@color/backroundColor">
+    android:background="@color/backroundColor"
+    android:orientation="vertical"
+    tools:context="com.example.hp.teamproject.MainRSfragment">
 
-    <TextView
-        android:id="@+id/textView2"
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:layout_gravity="center_vertical|center_horizontal"
-        android:text="@string/restaurantName1"
-        android:textSize="25dp" />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center">
+        <TextView
+            android:id="@+id/revie1"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="Detail"
+            android:textSize="30sp" />
+        <ImageView
+            android:id="@+id/chef"
+            android:layout_width="63dp"
+            android:layout_height="57dp"
+            android:layout_gravity="center"
+            android:src="@drawable/chef" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -27,7 +40,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:padding="8dp"
-            android:scaleType="fitXY" />
+            android:scaleType="centerInside" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -81,7 +94,6 @@
 
     <TextView
         android:id="@+id/menubar"
-        android:text="MENUS"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
@@ -89,9 +101,9 @@
         android:textSize="18dp" />
 
     <ListView
+        android:id="@+id/listview"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/listview"></ListView>
+        android:layout_height="wrap_content"></ListView>
 
 
 </LinearLayout>

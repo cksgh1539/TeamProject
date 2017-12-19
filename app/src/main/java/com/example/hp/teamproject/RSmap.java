@@ -46,10 +46,6 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * Created by A on 2017-12-05.
- */
-
 public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
     private FusedLocationProviderClient mFusedLocationClient;
     private LocationCallback mLocationCallback;
@@ -64,7 +60,6 @@ public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
     private Location mLastLocation;
     GoogleMap mGoogleMap = null;
 
-    String TAG = "food";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +72,7 @@ public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
         mapFragment.getMapAsync(this);
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-     //   getLastLocation();
+
         Button find = (Button) findViewById(R.id.find);
         find.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -239,7 +234,7 @@ public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
                 break;
             case R.id.viewAll:
                 item.setChecked(true);
-                editor.putBoolean("THREE",true).commit();
+                editor.putBoolean("ALL",true).commit();
                 CalculationByDistance(100000);
                 break;
         }
@@ -328,7 +323,6 @@ public class RSmap extends AppCompatActivity implements OnMapReadyCallback {
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }else{//새로 등록하는 맛집인 경우
                 ResistDialog(mlocation);
-                Log.i(TAG, getLocalClassName() + " :ResistDialog");
             }return false;
         }
     }

@@ -21,7 +21,7 @@ public class FoodDetail extends AppCompatActivity {
         }
 
         FoodDetailFrag details = new FoodDetailFrag();
-        Log.i("food", " :RSid =  " + getIntent().getIntExtra("index",-1)+"RSid  "+getIntent().getStringExtra("RSid"));
+
         details.setSelection(getIntent().getIntExtra("index",-1),getIntent().getStringExtra("RSid"));
         getSupportFragmentManager().beginTransaction().replace(R.id.Detail, details).commit();
     }

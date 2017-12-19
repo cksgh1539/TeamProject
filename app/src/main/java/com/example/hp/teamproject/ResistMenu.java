@@ -42,8 +42,6 @@ public class ResistMenu extends AppCompatActivity {
     private RSdbHelper mDbHelper;
 
 
-    String TAG = "food";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +52,6 @@ public class ResistMenu extends AppCompatActivity {
 
         Intent intent = getIntent(); //메뉴를 등록할 식당의 id값 받아오기
         RS_id = String.valueOf(intent.getIntExtra("RS_ID",0)); //int타입을 String으로 변환
-        Log.i(TAG, getLocalClassName() +" :receive RS_ID " + RS_id);
 
         ImageView RSimage = (ImageView)findViewById(R.id.MENU_Image);
         RSimage.setOnClickListener(new View.OnClickListener() {
@@ -95,7 +92,7 @@ public class ResistMenu extends AppCompatActivity {
                 //3. Uri 객체를 Extras를 통해 카메라 앱으로 전달
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, MENUUri);
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-                Log.i(TAG, getLocalClassName() + " :camera");
+
             } else
                 Toast.makeText(getApplicationContext(), "file null", Toast.LENGTH_SHORT).show();
         }
@@ -109,7 +106,6 @@ public class ResistMenu extends AppCompatActivity {
                //     "com.example.hp.teamproject", mPhotoFile);
 
             if (mPhotoFileName != null) {
-                Log.i(TAG, getLocalClassName() + " :MENU : " + MENUUri);
                 rotatePhoto();
                 try {
                     Bitmap image_bitmap= MediaStore.Images.Media.getBitmap(getContentResolver(), MENUUri);
@@ -125,6 +121,7 @@ public class ResistMenu extends AppCompatActivity {
         }
     }
 
+
     // 메뉴 정보 db에 등록하기----------------------------------------------------------------------
     private void insertRecord() {
         MENUname = (EditText)findViewById(R.id.MENUname); //맛집 이름 입력
@@ -135,7 +132,6 @@ public class ResistMenu extends AppCompatActivity {
                 ("file:///storage/emulated/0/Android/data/com.example.hp.teamproject/files/Pictures/"+mPhotoFileName,
                         MENUname.getText().toString(),MENUprice.getText().toString(), MENUcomment.getText().toString(),RS_id);
 
-        Log.i(TAG, getLocalClassName() + " :insert" +RS_id);
 
         if(nOfRows > 0) {
             Toast.makeText(this, "메뉴 등록중...", Toast.LENGTH_SHORT).show();
@@ -155,6 +151,7 @@ public class ResistMenu extends AppCompatActivity {
 
         return currentTimeStamp;
     }
+
 
     //permission확인 메소드-------------------------------------------------------------------------
     final int  REQUEST_EXTERNAL_STORAGE_FOR_MULTIMEDIA=1;
@@ -176,6 +173,8 @@ public class ResistMenu extends AppCompatActivity {
         }
     }
 
+
+    //사진 bitmap으로 변환---------------------------------------------------------------------------
     public Bitmap getBitmap() {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inInputShareable = true;

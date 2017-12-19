@@ -78,7 +78,8 @@ public class ResistRS extends AppCompatActivity{
         });
     }
 
-    //Restaurant사진 촬영 후 sdcard에 저장하고 불러오기---------------------------------------------
+
+    //Restaurant사진 촬영 후 sdcard에 저장하고 불러오기------------------------------------------------
     static final int REQUEST_IMAGE_CAPTURE = 1;
     private void dispatchTakePictureIntent() {//카메라 앱 실행 요청
      //   Uri RSUri=null;
@@ -208,6 +209,8 @@ public class ResistRS extends AppCompatActivity{
         }
     }
 
+
+    //사진 bitmap으로 변환---------------------------------------------------------------------------
     public Bitmap getBitmap() {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inInputShareable = true;

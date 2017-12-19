@@ -33,7 +33,6 @@ public class MainRSfragment extends Fragment {
     ImageView RSIMAGE, MENUIMAGE, ImagePhone;
     Cursor RS;
     int RS_id;
-    String TAG = "food";
 
     private RSdbHelper rsDbHelper;
 
@@ -76,6 +75,7 @@ public class MainRSfragment extends Fragment {
         return rootView;
     }
 
+
     //맛집 정보 출력---------------------------------------------------------------------------------
     private void viewRSToListView() {
         int i = getActivity().getIntent().getIntExtra("INT",0);
@@ -109,6 +109,7 @@ public class MainRSfragment extends Fragment {
         ADRRESS.setText(RS.getString(4));
     }
 
+
     //메뉴 리스트------------------------------------------------------------------------------------
     private void viewMENUToListView(View view) {
         Cursor Menu = rsDbHelper.getMenuByMethod();
@@ -134,9 +135,10 @@ public class MainRSfragment extends Fragment {
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         public void onItemClick(AdapterView<?> parent, View vClicked, int position, long id) {
                             mCurCheckPosition = position;
+
                             Activity activity = getActivity();
                             ((OnTitleSelectedListener) activity).onTitleSelected(position,String.valueOf(RS_id));
-                            Log.i(TAG, "position= "+position +"/"+ String.valueOf(RS_id));
+
                         }
                     });
                     listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
@@ -160,6 +162,7 @@ public class MainRSfragment extends Fragment {
             }
         }
     }
+
 
     //메뉴 추가하는 메소드----------------------------------------------------------------------------
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
