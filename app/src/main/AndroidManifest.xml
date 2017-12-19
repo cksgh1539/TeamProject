@@ -5,6 +5,8 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.CALL_PHONE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA"/>
 
     <application
         android:allowBackup="true"
@@ -33,7 +35,9 @@
         </activity>
 
         <activity android:name=".ResistRS"
-            android:parentActivityName=".RSmap">
+            android:parentActivityName=".RSmap"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait">
         </activity>
 
         <activity android:name=".ResistMenu">
@@ -46,6 +50,9 @@
         <activity android:name=".FoodDetail"
             android:parentActivityName=".MainRestaurant">
         </activity>
+
+
+
 
         <provider
             android:name="android.support.v4.content.FileProvider"
