@@ -39,7 +39,8 @@ import static android.os.Environment.DIRECTORY_DCIM;
 import static android.os.Environment.getExternalStorageDirectory;
 
 public class ResistRS extends AppCompatActivity{
-   static Uri RSUri;
+    Uri RSUri;
+    File path;
     EditText RSname;
     EditText RSnum;
     EditText RSadrress;
@@ -82,83 +83,42 @@ public class ResistRS extends AppCompatActivity{
     //Restaurant사진 촬영 후 sdcard에 저장하고 불러오기------------------------------------------------
     static final int REQUEST_IMAGE_CAPTURE = 1;
     private void dispatchTakePictureIntent() {//카메라 앱 실행 요청
-     //   Uri RSUri=null;
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
         if(takePictureIntent.resolveActivity(getPackageManager())!= null) {
             //1. 카메라 앱으로 찍은 이미지를 저장할 파일 객체 생성
-            mPhotoFileName = "img"+ currentDateFormat() + ".jpg";
-            // 파일 이름 설정
+            mPhotoFileName = "img"+ currentDateFormat() + ".jpg";  // 파일 이름 설정
+           path = getExternalFilesDir(Environment.DIRECTORY_PICTURES); //
 
-          //  File path = new File(Environment.getExternalStorageDirectory());
-           File path = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-            // 외부공용디렉토리의픽쳐폴더(sdcard/Pictures)의 폴더를 path로 가져옴
-          //  mPhotoFile = new File("/storage/emulated/legacy/data/DCIM/Camera", mPhotoFileName);
-         //   Log.i(TAG,"path="+path);
-           //mPhotoFile = new File(path, mPhotoFileName);
-
-            mPhotoFile = new File(
-                    path,mPhotoFileName);
-           // mPhotoFile = new File("/storage/emulated/legacy/DCIM/Camera/", mPhotoFileName);
-           // mPhotoFile = new File(path, "storage/emulated/legacy/data/DCIM/Camera" + "/"+ mPhotoFileName);// path폴더에 , mPhotoFileName 이라는 파일이름으로 저장
+            mPhotoFile = new File(path,mPhotoFileName);
 
             if (mPhotoFile != null) {
-                            Log.i(TAG,"patsdfh="+mPhotoFile);
-               // mPhotoFile = new File(Environment.getExternalStorageDirectory( ), "storage/emulated/legacy/data/DCIM/Camera" + "/"+ mPhotoFileName);
-                //2. 생성된 파일 객체에 대한 Uri 객체를 얻기
-            //    RSUri = FileProvider.getUriForFile(this,"com.example.hp.teamproject", mPhotoFile);
-                RSUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory().getPath()
-                        +"/Android/data/com.example.hp.teamproject/files/Pictures/"+mPhotoFileName));
-                //"file:///storage/emulated/0/Pictures/"+mPhotoFileName
-                //3. Uri 객체를 Extras를 통해 카메라 앱으로 전달
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, RSUri);
-                Log.i(TAG,"patsdfh="+mPhotoFileName+"   URI"+RSUri);
+                RSUri = Uri.fromFile(new File(path+mPhotoFileName)); //2. 생성된 파일 객체에 대한 Uri 객체를 얻기
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, RSUri);  //3. Uri 객체를 Extras를 통해 카메라 앱으로 전달
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-              //  Log.i(TAG, getLocalClassName() + " :camera "+path+"="+mPhotoFile);
             } else
                 Toast.makeText(getApplicationContext(), "file null", Toast.LENGTH_SHORT).show();
         }
     }
-
+ //사진찍고난후-----------------------------------------------------------------------------------------------
     protected void onActivityResult(int requestCode, int resultCode,Intent data) {
-        Log.i(TAG,"파일 경로="+RSUri);
-     //   Uri imgUri = RSUri;
         ImageView imageView = (ImageView) findViewById(R.id.RS_Image);
-        Log.i(TAG, getLocalClassName() + " :savePicture"+resultCode+RESULT_OK+REQUEST_IMAGE_CAPTURE);
-
-       /* rotatePhoto();
-        try {
-            Bitmap image_bitmap= MediaStore.Images.Media.getBitmap(getContentResolver(), RSUri);
-            imageView.setImageBitmap(image_bitmap);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
 
         if (requestCode == REQUEST_IMAGE_CAPTURE ) {
-            Log.i(TAG, getLocalClassName() + " :savePicture1");
-            Log.i(TAG,"파일 이름="+mPhotoFileName);
             if (mPhotoFileName != null) {
                 rotatePhoto();
                 try {
                     Bitmap image_bitmap= MediaStore.Images.Media.getBitmap(getContentResolver(), RSUri);
                     imageView.setImageBitmap(image_bitmap);
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-              //  Log.i(TAG,"파일 경로="+imgUri);
-             //   mPhotoFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), mPhotoFileName);
-                Log.i(TAG,"mPhotoFIlePath="+mPhotoFile);
-                Log.i(TAG, getLocalClassName() + " :savePicture2");
-               // imageView.setImageURI(RSUri);
-
             } else {
                 Toast.makeText(getApplicationContext(), "mPhotoFile is null", Toast.LENGTH_SHORT).show();
             }
         }
     }
-
+    //이미지 파일 날짜 포맷 함수-----------------------------------------------------------------------------
     private String currentDateFormat(){
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
         String currentTimeStamp = dateFormat.format(new Date());
@@ -173,11 +133,8 @@ public class ResistRS extends AppCompatActivity{
         RSadrress = (EditText)findViewById(R.id.RSadrress); // 맛집 주소 입력
 
         long nOfRows = mDbHelper.insertRSByMethod
-                ("file:///storage/emulated/0/Android/data/com.example.hp.teamproject/files/Pictures/"+mPhotoFileName, RSname.getText().toString(),
+                (String.valueOf(RSUri), RSname.getText().toString(),
                         RSnum.getText().toString(), RSadrress.getText().toString(),latitude, longitude);
-        Log.i(TAG, getLocalClassName() + " :insert" + nOfRows);
-
-
         if(nOfRows > 0) {
             Toast.makeText(this, "맛집 등록중...", Toast.LENGTH_SHORT).show();
 
@@ -187,7 +144,6 @@ public class ResistRS extends AppCompatActivity{
 
         }else Toast.makeText(this,"[Error] Try again",Toast.LENGTH_SHORT).show();
     }
-
 
     //permission확인 메소드-------------------------------------------------------------------------
     final int  REQUEST_EXTERNAL_STORAGE_FOR_MULTIMEDIA=1;
@@ -211,44 +167,38 @@ public class ResistRS extends AppCompatActivity{
 
 
     //사진 bitmap으로 변환---------------------------------------------------------------------------
+    //https://github.com/skdlzl326/MyApplication/tree/master/app/src/main/java/com/example/star/myapplication[참고자료]
     public Bitmap getBitmap() {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inInputShareable = true;
         options.inDither=false;
-        options.inTempStorage=new byte[32 * 1024];
+        options.inTempStorage=new byte[64 * 1024];
         options.inPurgeable = true;
         options.inJustDecodeBounds = false;
 
         File f = new File(RSUri.getPath());
-
         FileInputStream fs=null;
         try {
             fs = new FileInputStream(f);
         } catch (FileNotFoundException e) {
-            //TODO do something intelligent
             e.printStackTrace();
         }
-
         Bitmap bm = null;
-
         try {
             if(fs!=null) bm=BitmapFactory.decodeFileDescriptor(fs.getFD(), null, options);
         } catch (IOException e) {
-            //TODO do something intelligent
             e.printStackTrace();
         } finally{
             if(fs!=null) {
                 try {
                     fs.close();
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             }
         }
         return bm;
     }
-
 
     public void rotatePhoto() {
         ExifInterface exif;
@@ -263,14 +213,13 @@ public class ResistRS extends AppCompatActivity{
             }
         }
         catch (IOException e) {
-            // TODO Auto-generated catch block
+
             e.printStackTrace();
         }
 
     }
 
-    public int exifOrientationToDegrees(int exifOrientation)
-    {
+    public int exifOrientationToDegrees(int exifOrientation){
         if(exifOrientation == ExifInterface.ORIENTATION_ROTATE_90)
         {
             return 90;

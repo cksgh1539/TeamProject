@@ -38,9 +38,8 @@ public class FoodAdapter extends BaseAdapter{
         TextView price = view.findViewById(R.id.MenuPrice);
 
         Uri Img = Uri.parse(fData.get(j).getPicture());
-        Log.i("food11", " :RSid1111111111111111 =  " + Img);
-        Image.setImageURI(Img);
 
+        Image.setImageURI(Img);
         name.setText(fData.get(j).getName());
         price.setText(fData.get(j).getPrice());
 

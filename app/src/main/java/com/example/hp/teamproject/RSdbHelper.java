@@ -67,7 +67,6 @@ public class RSdbHelper extends SQLiteOpenHelper {
         String sql = "Select * FROM " + RSdb.Restaurant.TABLE_NAME
                 + " Where " + RSdb.Restaurant.KEY_latitude + " = '" + latitude + "'"
                 +" AND " + RSdb.Restaurant.KEY_longitde + " = '" + longitude + "'";
-
         return db.rawQuery(sql, null);
     }
 
@@ -76,16 +75,6 @@ public class RSdbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getReadableDatabase();
         String sql1 = "Select * FROM " + RSdb.Restaurant.TABLE_NAME
                 + " Where " + RSdb.Restaurant.KEY_name + " = '" + name + "'";
-
-        return db.rawQuery(sql1, null);
-    }
-
-    //받아온 아이디와 일치하는 restaurant select
-    public Cursor getRSbyID (int id) {
-        SQLiteDatabase db = getReadableDatabase();
-        String sql1 = "Select * FROM " + RSdb.Restaurant.TABLE_NAME
-                + " Where " + RSdb.Restaurant._ID + " = '" + id + "'";
-
         return db.rawQuery(sql1, null);
     }
 
@@ -95,12 +84,18 @@ public class RSdbHelper extends SQLiteOpenHelper {
         return db.query(RSdb.Menu.TABLE_NAME2,null,null,null,null,null,null);
     }
 
+    //받아온 아이디와 일치하는 restaurant select
+    public Cursor getRSbyID (int id) {
+        SQLiteDatabase db = getReadableDatabase();
+        String sql1 = "Select * FROM " + RSdb.Restaurant.TABLE_NAME
+                + " Where " + RSdb.Restaurant._ID + " = '" + id + "'";
+        return db.rawQuery(sql1, null);
+    }
     //받아온 id 값과 일치하는 menu select
     public Cursor getMenuByID(String id) {
         SQLiteDatabase db = getReadableDatabase();
         String sql2 = "Select * FROM " + RSdb.Menu.TABLE_NAME2
                 + " Where " + RSdb.Menu.KEY_ID + " = '" + id + "'";
-
         return db.rawQuery(sql2, null);
     }
 

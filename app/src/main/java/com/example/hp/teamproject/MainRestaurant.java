@@ -24,7 +24,6 @@ public class MainRestaurant extends AppCompatActivity implements MainRSfragment.
             details.setSelection(i,RS_id);
             getSupportFragmentManager().beginTransaction().replace(R.id.details, details).commit();
 
-
         } else {
             Intent intent = new Intent(this, FoodDetail.class);
             intent.putExtra("index", i);

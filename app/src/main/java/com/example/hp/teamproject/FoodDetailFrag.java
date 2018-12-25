@@ -52,8 +52,6 @@ public class FoodDetailFrag extends Fragment {
         Cursor cursor= MenuDB.getMenuByID(RSid);
         if(index >= 0)
         cursor.moveToPosition(index);
-        //cursor.moveToNext();
-        Log.i("food", " :RSid =  " + RSid+cursor.getCount());
 
         Uri Img = Uri.parse(cursor.getString(1));
         MenuImg.setImageURI(Img);

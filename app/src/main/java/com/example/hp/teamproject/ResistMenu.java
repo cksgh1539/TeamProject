@@ -32,7 +32,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class ResistMenu extends AppCompatActivity {
-    static Uri MENUUri;
+    Uri MENUUri;
+    File path;
     EditText MENUname;
     EditText MENUprice;
     EditText MENUcomment;
@@ -68,7 +69,6 @@ public class ResistMenu extends AppCompatActivity {
         });
     }
 
-
     //메뉴 사진 촬영 후 sdcard에 저장하고 불러오기---------------------------------------------
     static final int REQUEST_IMAGE_CAPTURE = 1;
     private void dispatchTakePictureIntent() { //카메라 앱 실행 요청
@@ -76,18 +76,13 @@ public class ResistMenu extends AppCompatActivity {
 
         if(takePictureIntent.resolveActivity(getPackageManager())!= null) {
             //1. 카메라 앱으로 찍은 이미지를 저장할 파일 객체 생성
-            mPhotoFileName = "IMG" + currentDateFormat() + ".jpg";
-            // 파일 이름 설정
-
-            File path = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-            // 외부공용디렉토리의픽쳐폴더(sdcard/Pictures)의 폴더를 path로 가져옴
-
+            mPhotoFileName = "IMG" + currentDateFormat() + ".jpg";  // 파일 이름 설정
+            path = getExternalFilesDir(Environment.DIRECTORY_PICTURES);// /storage/emulated/0/Android/data/com.example.hp.teamproject/files/Pictures
             mPhotoFile = new File(path, mPhotoFileName);// path폴더에 , mPhotoFileName 이라는 파일이름으로 저장
 
             if (mPhotoFile != null) {
                 //2. 생성된 파일 객체에 대한 Uri 객체를 얻기
-                MENUUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory().getPath()
-                        +"/Android/data/com.example.hp.teamproject/files/Pictures/"+mPhotoFileName));
+                MENUUri = Uri.fromFile(new File(path+mPhotoFileName));
 
                 //3. Uri 객체를 Extras를 통해 카메라 앱으로 전달
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, MENUUri);
@@ -102,25 +97,19 @@ public class ResistMenu extends AppCompatActivity {
         ImageView imageView = (ImageView) findViewById(R.id.MENU_Image);
 
         if (requestCode == REQUEST_IMAGE_CAPTURE) {
-          //  MENUUri = FileProvider.getUriForFile(this,
-               //     "com.example.hp.teamproject", mPhotoFile);
 
             if (mPhotoFileName != null) {
                 rotatePhoto();
                 try {
                     Bitmap image_bitmap= MediaStore.Images.Media.getBitmap(getContentResolver(), MENUUri);
                     imageView.setImageBitmap(image_bitmap);
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-              //  imageView.setImageURI(Me);
             } else
-                Toast.makeText(getApplicationContext(), "PhotoFile is null",
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "PhotoFile is null", Toast.LENGTH_SHORT).show();
         }
     }
-
 
     // 메뉴 정보 db에 등록하기----------------------------------------------------------------------
     private void insertRecord() {
@@ -129,13 +118,11 @@ public class ResistMenu extends AppCompatActivity {
         MENUcomment = (EditText)findViewById(R.id.MENUcomment); // 맛집 주소 입력
 
         long nOfRows = mDbHelper.insertMENUByMethod
-                ("file:///storage/emulated/0/Android/data/com.example.hp.teamproject/files/Pictures/"+mPhotoFileName,
+                (String.valueOf(MENUUri),
                         MENUname.getText().toString(),MENUprice.getText().toString(), MENUcomment.getText().toString(),RS_id);
-
 
         if(nOfRows > 0) {
             Toast.makeText(this, "메뉴 등록중...", Toast.LENGTH_SHORT).show();
-
             Intent RestaurantDetail = new Intent(getApplicationContext(), MainRestaurant.class);
             RestaurantDetail.putExtra("MENU_id",RS_id);
             RestaurantDetail.putExtra("INT",2);
@@ -144,14 +131,11 @@ public class ResistMenu extends AppCompatActivity {
         }else Toast.makeText(this,"[Error] Try again",Toast.LENGTH_SHORT).show();
     }
 
-
     private String currentDateFormat(){
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HH_mm_ss");
         String currentTimeStamp = dateFormat.format(new Date());
-
         return currentTimeStamp;
     }
-
 
     //permission확인 메소드-------------------------------------------------------------------------
     final int  REQUEST_EXTERNAL_STORAGE_FOR_MULTIMEDIA=1;
@@ -173,7 +157,6 @@ public class ResistMenu extends AppCompatActivity {
         }
     }
 
-
     //사진 bitmap으로 변환---------------------------------------------------------------------------
     public Bitmap getBitmap() {
         BitmapFactory.Options options = new BitmapFactory.Options();
@@ -192,9 +175,7 @@ public class ResistMenu extends AppCompatActivity {
             //TODO do something intelligent
             e.printStackTrace();
         }
-
         Bitmap bm = null;
-
         try {
             if(fs!=null) bm=BitmapFactory.decodeFileDescriptor(fs.getFD(), null, options);
         } catch (IOException e) {
@@ -230,7 +211,6 @@ public class ResistMenu extends AppCompatActivity {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
     }
 
     public int exifOrientationToDegrees(int exifOrientation)
@@ -256,17 +236,14 @@ public class ResistMenu extends AppCompatActivity {
         {
             Matrix m = new Matrix();
             m.setRotate(degrees, (float)image.getWidth(), (float)image.getHeight());
-
             try
             {
                 Bitmap b = Bitmap.createBitmap(image, 0, 0, image.getWidth(), image.getHeight(), m, true);
-
                 if(image != b)
                 {
                     image.recycle();
                     image = b;
                 }
-
                 image = b;
             }
             catch(OutOfMemoryError ex)
@@ -276,7 +253,6 @@ public class ResistMenu extends AppCompatActivity {
         }
         return image;
     }
-
 
     public void saveBitmap(Bitmap bitmap) {
         File file = new File(MENUUri.getPath());

@@ -112,9 +112,8 @@ public class MainRSfragment extends Fragment {
 
     //메뉴 리스트------------------------------------------------------------------------------------
     private void viewMENUToListView(View view) {
-        Cursor Menu = rsDbHelper.getMenuByMethod();
-        if (RS.getCount() != 0 && Menu.getCount() != 0) { //db테이블이 생성된 경우
-            Log.i("food", " :RSid =  " + RS_id);
+     //   Cursor Menu = rsDbHelper.getMenuByMethod();
+        if (RS.getCount() != 0 ) { //db테이블이 생성된 경우
 
             Cursor ID = rsDbHelper.getMenuByID(String.valueOf(RS_id)); //RS_id와 같은 id값을 가진 레코드 선택
                 if (ID.getCount() != 0) { //등록된 메뉴가 있을 경우
@@ -135,10 +134,8 @@ public class MainRSfragment extends Fragment {
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         public void onItemClick(AdapterView<?> parent, View vClicked, int position, long id) {
                             mCurCheckPosition = position;
-
                             Activity activity = getActivity();
                             ((OnTitleSelectedListener) activity).onTitleSelected(position,String.valueOf(RS_id));
-
                         }
                     });
                     listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
@@ -147,7 +144,7 @@ public class MainRSfragment extends Fragment {
             return;
     }
 
-    @Override
+/*    @Override
     public void onViewStateRestored(Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
         if (savedInstanceState != null) {
@@ -161,7 +158,7 @@ public class MainRSfragment extends Fragment {
                 lv.smoothScrollToPosition(mCurCheckPosition);
             }
         }
-    }
+    }*/
 
 
     //메뉴 추가하는 메소드----------------------------------------------------------------------------
